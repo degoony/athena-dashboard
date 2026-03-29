@@ -26,9 +26,9 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait">
 <div style="font-size:40px">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (4 < 5); No valid expiry (DTE=19)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,889</div></div>
+<div><div class="label">BTC</div><div class="value">$66,874</div></div>
 <div><div class="label">Pullback</div><div class="value check">12.0% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
 <div><div class="label">DVOL</div><div class="value">53.5 ↓</div></div>
@@ -44,7 +44,87 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
 <b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
-</div></div><div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:53</div>
+</div></div>
+
+<div class="card"><h2>Distance to Green Light</h2>
+<canvas id="gaugeChart" style="width:100%;height:200px;"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('gaugeChart');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || 340;
+  const H = 200;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const filters = [
+    { name: 'DVOL Falling', current: 53.5, target: 53.6, unit: '',
+       ok: 1, desc: 'Need DVOL < ' + 53.6,
+       pct: 53.5 < 53.6 ? 100 : Math.max(0, (1 - (53.5 - 53.6) / 10) * 100) },
+    { name: 'VRP ≥ 5', current: 3.5, target: 5, unit: ' pts',
+       ok: 0, desc: 'Need ' + (5 - 3.5).toFixed(1) + ' more pts',
+       pct: Math.min(100, 3.5 / 5 * 100) },
+    { name: 'Pullback ≥ 5%', current: 12.0, target: 5, unit: '%',
+       ok: 1, desc: '12.0% (need 5%)',
+       pct: Math.min(100, 12.0 / 5 * 100) },
+  ];
+
+  const barH = 32, gap = 20, padL = 110, padR = 60, startY = 15;
+
+  filters.forEach((f, i) => {
+    const y = startY + i * (barH + gap);
+    const barW = W - padL - padR;
+
+    // Label
+    ctx.fillStyle = f.ok ? '#66bb6a' : '#ff9800';
+    ctx.font = 'bold 13px -apple-system, system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText(f.name, padL - 10, y + barH/2 + 5);
+
+    // Background bar
+    ctx.fillStyle = '#0d1520';
+    ctx.beginPath();
+    ctx.roundRect(padL, y, barW, barH, 6);
+    ctx.fill();
+
+    // Progress fill
+    const fillW = Math.max(0, Math.min(barW, barW * f.pct / 100));
+    ctx.fillStyle = f.ok ? 'rgba(102,187,106,0.7)' : 'rgba(255,152,0,0.5)';
+    ctx.beginPath();
+    ctx.roundRect(padL, y, fillW, barH, 6);
+    ctx.fill();
+
+    // Threshold marker line at 100%
+    if (!f.ok) {
+      const threshX = padL + barW;
+      ctx.strokeStyle = '#66bb6a88';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.moveTo(threshX, y);
+      ctx.lineTo(threshX, y + barH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Value text inside bar
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px -apple-system, system-ui';
+    ctx.textAlign = 'left';
+    const valText = f.ok ? '✓ ' + f.current + f.unit : f.current + f.unit + ' → need ' + f.target + f.unit;
+    ctx.fillText(valText, padL + 8, y + barH/2 + 4);
+
+    // Percentage on right
+    ctx.fillStyle = f.ok ? '#66bb6a' : '#ff9800';
+    ctx.font = 'bold 13px -apple-system, system-ui';
+    ctx.textAlign = 'left';
+    ctx.fillText(f.ok ? '✅' : Math.round(f.pct) + '%', padL + barW + 8, y + barH/2 + 5);
+  });
+})();
+</script>
+</div><div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:55</div>
 <div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
