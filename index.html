@@ -26,27 +26,42 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait">
 <div style="font-size:40px">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (4 < 5); No valid expiry (DTE=19) [regime: NEUTRAL, gates: VRP≥5, PB≥5%]</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,813</div></div>
+<div><div class="label">BTC</div><div class="value">$66,781</div></div>
 <div><div class="label">Pullback</div><div class="value check">12.1% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value">53.5 ↓</div></div>
+<div><div class="label">DVOL</div><div class="value">53.6 ↓</div></div>
 <div><div class="label">SMA20</div><div class="value">53.6</div></div>
 <div><div class="label">RV</div><div class="value">50.0%</div></div>
 <div><div class="label">VRP</div><div class="value fail">3.5 ✗</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail">✅ <b>DVOL Falling</b> — DVOL (53.5) < 20d avg (53.6)<br>
+<div class="detail">✅ <b>DVOL Falling</b> — DVOL (53.6) < 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail">❌ <b>VRP ≥ 5</b> — Currently 3.5 pts (DVOL 53.5 minus RV 50.0)<br>
-<span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
+<div class="detail">❌ <b>VRP ≥ 5</b> — Currently 3.5 pts (DVOL 53.6 minus RV 50.0)<br>
+<span style="font-size:11px;color:#667">Vol risk premium gate (regime-adaptive: NEUTRAL). Standard=5, favorable=3, risky=8.</span></div>
 <div class="detail">✅ <b>Pullback ≥ 5%</b> — BTC is 12.1% below 20d high ($75,997)<br>
-<span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
+<span style="font-size:11px;color:#667">Pullback gate (regime-adaptive). Standard=5%, favorable=3%.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
-<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
+<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. Regime layer adjusts VRP and pullback gates based on market conditions. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take. Then wait for BTC to recover to 90% of entry price before writing again.
+</div></div>
+<div class="card" style="border:1px solid #455a64">
+<h2>Regime Layer 🟡 NEUTRAL (score: +1)</h2>
+<div style="font-size:12px;color:#8899aa;margin-bottom:10px">Modulates filter strictness: favorable = looser gates, risky = tighter/idle</div>
+<div class="detail"><span style="color:#8899aa">0</span> <b>Funding Rate</b> — 8h: 0.0008% (ann: 0.9%)<br>
+<span style="font-size:11px;color:#667">Positive = crowded longs, mean-reversion likely, good for writing.</span></div>
+<div class="detail"><span style="color:#8899aa">0</span> <b>Vol Term Structure</b> — flat (front 5d: 52.5, back 26d: 51.2, spread: -1.3)<br>
+<span style="font-size:11px;color:#667">Contango = calm. Backwardation = event risk.</span></div>
+<div class="detail"><span style="color:#8899aa">0</span> <b>Call Skew</b> — narrow (ATM: 51.2, 5%OTM: 48.7, skew: +2.5)<br>
+<span style="font-size:11px;color:#667">Wide = OTM calls cheap, safe to sell. Inverted = upside demand.</span></div>
+<div class="detail"><span style="color:#66bb6a">+1</span> <b>DVOL Percentile</b> — 87th (vs 252-day history)<br>
+<span style="font-size:11px;color:#667">&gt;60th = elevated vol, richer premiums.</span></div>
+<div style="margin-top:10px;padding:8px;background:#0d1520;border-radius:8px;font-size:12px;color:#8899aa">
+Active gates: <b style="color:#fff">VRP >= 5</b> | <b style="color:#fff">Pullback >= 5%</b>
 </div></div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+
 <div class="card" style="padding:12px"><h2 style="font-size:12px">📉 DVOL vs SMA</h2>
 <div style="font-size:10px;color:#667;margin-bottom:6px">Must be falling (below SMA)</div>
 <canvas id="c1" style="width:100%;aspect-ratio:1"></canvas></div>
@@ -126,7 +141,7 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   data.forEach((d, i) => { if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); });
 }
 
-const dvol_data = [{"d": "02/28", "v": 55.2}, {"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 53.5}];
+const dvol_data = [{"d": "02/28", "v": 55.2}, {"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 53.6}];
 const rv_data = [{"d": "02/23", "v": 68.1}, {"d": "02/24", "v": 67.6}, {"d": "02/25", "v": 72.0}, {"d": "02/26", "v": 72.0}, {"d": "02/27", "v": 70.8}, {"d": "02/28", "v": 71.2}, {"d": "03/01", "v": 68.3}, {"d": "03/02", "v": 70.5}, {"d": "03/03", "v": 70.1}, {"d": "03/04", "v": 73.6}, {"d": "03/05", "v": 72.8}, {"d": "03/06", "v": 59.9}, {"d": "03/07", "v": 50.2}, {"d": "03/08", "v": 50.1}, {"d": "03/09", "v": 50.5}, {"d": "03/10", "v": 50.8}, {"d": "03/11", "v": 50.2}, {"d": "03/12", "v": 50.1}, {"d": "03/13", "v": 49.3}, {"d": "03/14", "v": 47.6}, {"d": "03/15", "v": 47.5}, {"d": "03/16", "v": 48.3}, {"d": "03/17", "v": 48.3}, {"d": "03/18", "v": 50.0}, {"d": "03/19", "v": 49.7}, {"d": "03/20", "v": 49.8}, {"d": "03/21", "v": 49.6}, {"d": "03/22", "v": 50.6}, {"d": "03/23", "v": 51.8}, {"d": "03/24", "v": 50.0}];
 const pb_data = [{"d": "02/23", "v": 16.0}, {"d": "02/24", "v": 12.9}, {"d": "02/25", "v": 4.6}, {"d": "02/26", "v": 6.6}, {"d": "02/27", "v": 9.3}, {"d": "02/28", "v": 7.6}, {"d": "03/01", "v": 7.4}, {"d": "03/02", "v": 2.1}, {"d": "03/03", "v": 4.1}, {"d": "03/04", "v": 1.0}, {"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}];
 
@@ -145,8 +160,8 @@ drawChart('c2', vrp_data.length ? vrp_data : [{d:'—',v:0}], 5, 'VRP = 5 (min)'
 drawChart('c3', pb_data, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
-<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 21:03</div>
-<div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
+<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 21:35</div>
+<div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP>=5 · DVOL falling · pb5% · PT60 · rec90 · regime: NEUTRAL</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
 </div>
