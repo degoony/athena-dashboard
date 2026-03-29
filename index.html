@@ -26,9 +26,9 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait">
 <div style="font-size:40px">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (4 < 5); No valid expiry (DTE=19) [regime: NEUTRAL, gates: VRP≥5, PB≥5%]</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (4 < 5); No valid expiry (DTE=19)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,781</div></div>
+<div><div class="label">BTC</div><div class="value">$66,768</div></div>
 <div><div class="label">Pullback</div><div class="value check">12.1% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
 <div><div class="label">DVOL</div><div class="value">53.6 ↓</div></div>
@@ -39,29 +39,14 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="detail">✅ <b>DVOL Falling</b> — DVOL (53.6) < 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
 <div class="detail">❌ <b>VRP ≥ 5</b> — Currently 3.5 pts (DVOL 53.6 minus RV 50.0)<br>
-<span style="font-size:11px;color:#667">Vol risk premium gate (regime-adaptive: NEUTRAL). Standard=5, favorable=3, risky=8.</span></div>
+<span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
 <div class="detail">✅ <b>Pullback ≥ 5%</b> — BTC is 12.1% below 20d high ($75,997)<br>
-<span style="font-size:11px;color:#667">Pullback gate (regime-adaptive). Standard=5%, favorable=3%.</span></div>
+<span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
-<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. Regime layer adjusts VRP and pullback gates based on market conditions. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take. Then wait for BTC to recover to 90% of entry price before writing again.
-</div></div>
-<div class="card" style="border:1px solid #455a64">
-<h2>Regime Layer 🟡 NEUTRAL (score: +1)</h2>
-<div style="font-size:12px;color:#8899aa;margin-bottom:10px">Modulates filter strictness: favorable = looser gates, risky = tighter/idle</div>
-<div class="detail"><span style="color:#8899aa">0</span> <b>Funding Rate</b> — 8h: 0.0008% (ann: 0.9%)<br>
-<span style="font-size:11px;color:#667">Positive = crowded longs, mean-reversion likely, good for writing.</span></div>
-<div class="detail"><span style="color:#8899aa">0</span> <b>Vol Term Structure</b> — flat (front 5d: 52.5, back 26d: 51.2, spread: -1.3)<br>
-<span style="font-size:11px;color:#667">Contango = calm. Backwardation = event risk.</span></div>
-<div class="detail"><span style="color:#8899aa">0</span> <b>Call Skew</b> — narrow (ATM: 51.2, 5%OTM: 48.7, skew: +2.5)<br>
-<span style="font-size:11px;color:#667">Wide = OTM calls cheap, safe to sell. Inverted = upside demand.</span></div>
-<div class="detail"><span style="color:#66bb6a">+1</span> <b>DVOL Percentile</b> — 87th (vs 252-day history)<br>
-<span style="font-size:11px;color:#667">&gt;60th = elevated vol, richer premiums.</span></div>
-<div style="margin-top:10px;padding:8px;background:#0d1520;border-radius:8px;font-size:12px;color:#8899aa">
-Active gates: <b style="color:#fff">VRP >= 5</b> | <b style="color:#fff">Pullback >= 5%</b>
+<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
 </div></div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-
 <div class="card" style="padding:12px"><h2 style="font-size:12px">📉 DVOL vs SMA</h2>
 <div style="font-size:10px;color:#667;margin-bottom:6px">Must be falling (below SMA)</div>
 <canvas id="c1" style="width:100%;aspect-ratio:1"></canvas></div>
@@ -160,8 +145,8 @@ drawChart('c2', vrp_data.length ? vrp_data : [{d:'—',v:0}], 5, 'VRP = 5 (min)'
 drawChart('c3', pb_data, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
-<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 21:35</div>
-<div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP>=5 · DVOL falling · pb5% · PT60 · rec90 · regime: NEUTRAL</div>
+<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 21:42</div>
+<div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
 </div>
