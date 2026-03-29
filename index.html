@@ -28,7 +28,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
 <div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,874</div></div>
+<div><div class="label">BTC</div><div class="value">$66,858</div></div>
 <div><div class="label">Pullback</div><div class="value check">12.0% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
 <div><div class="label">DVOL</div><div class="value">53.5 ↓</div></div>
@@ -46,85 +46,108 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
 </div></div>
 
-<div class="card"><h2>Distance to Green Light</h2>
-<canvas id="gaugeChart" style="width:100%;height:200px;"></canvas>
+<div class="card"><h2>📉 DVOL vs 20d SMA — Must be falling</h2>
+<div style="font-size:11px;color:#667;margin-bottom:8px">DVOL (blue) must drop below its 20-day average (dashed). When it crosses below = vol crush = time to sell.</div>
+<canvas id="c1" style="width:100%;height:160px"></canvas></div>
+
+<div class="card"><h2>📊 VRP (DVOL − RV) — Must be ≥ 5</h2>
+<div style="font-size:11px;color:#667;margin-bottom:8px">Gap between implied (DVOL) and realized vol. When ≥5 pts, options are overpriced vs actual moves. Green zone = write.</div>
+<canvas id="c2" style="width:100%;height:160px"></canvas></div>
+
+<div class="card"><h2>📉 Pullback from 20d High — Must be ≥ 5%</h2>
+<div style="font-size:11px;color:#667;margin-bottom:8px">How far BTC has dropped from its recent high. Selling calls after a pullback = safer entry, less likely to get blown through.</div>
+<canvas id="c3" style="width:100%;height:160px"></canvas></div>
+
 <script>
-(function() {
-  const canvas = document.getElementById('gaugeChart');
+function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !data.length) return;
   const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || 340;
-  const H = 200;
+  const W = canvas.offsetWidth || 320, H = 160;
   canvas.width = W * dpr; canvas.height = H * dpr;
   canvas.style.height = H + 'px';
   const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
-  const filters = [
-    { name: 'DVOL Falling', current: 53.5, target: 53.6, unit: '',
-       ok: 1, desc: 'Need DVOL < ' + 53.6,
-       pct: 53.5 < 53.6 ? 100 : Math.max(0, (1 - (53.5 - 53.6) / 10) * 100) },
-    { name: 'VRP ≥ 5', current: 3.5, target: 5, unit: ' pts',
-       ok: 0, desc: 'Need ' + (5 - 3.5).toFixed(1) + ' more pts',
-       pct: Math.min(100, 3.5 / 5 * 100) },
-    { name: 'Pullback ≥ 5%', current: 12.0, target: 5, unit: '%',
-       ok: 1, desc: '12.0% (need 5%)',
-       pct: Math.min(100, 12.0 / 5 * 100) },
-  ];
+  const vals = data.map(d => d.v);
+  const allVals = vals.concat(threshold !== null ? [threshold] : []);
+  let minV = Math.min(...allVals), maxV = Math.max(...allVals);
+  const margin = (maxV - minV) * 0.15 || 5;
+  minV -= margin; maxV += margin;
 
-  const barH = 32, gap = 20, padL = 110, padR = 60, startY = 15;
+  const pad = {t:20, r:45, b:28, l:8};
+  const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+  const x = i => pad.l + (i / (data.length - 1)) * cw;
+  const y = v => pad.t + (1 - (v - minV) / (maxV - minV)) * ch;
 
-  filters.forEach((f, i) => {
-    const y = startY + i * (barH + gap);
-    const barW = W - padL - padR;
+  // Grid
+  ctx.strokeStyle = '#1a2d3d'; ctx.lineWidth = 0.5;
+  for (let g = 0; g < 4; g++) {
+    const gv = minV + (maxV - minV) * g / 3;
+    ctx.beginPath(); ctx.moveTo(pad.l, y(gv)); ctx.lineTo(W - pad.r, y(gv)); ctx.stroke();
+    ctx.fillStyle = '#556'; ctx.font = '10px -apple-system';
+    ctx.textAlign = 'right'; ctx.fillText(gv.toFixed(1), W - pad.r + 38, y(gv) + 3);
+  }
 
-    // Label
-    ctx.fillStyle = f.ok ? '#66bb6a' : '#ff9800';
-    ctx.font = 'bold 13px -apple-system, system-ui';
-    ctx.textAlign = 'right';
-    ctx.fillText(f.name, padL - 10, y + barH/2 + 5);
+  // Threshold line
+  if (threshold !== null) {
+    const ty = y(threshold);
+    ctx.strokeStyle = threshColor || '#66bb6a'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = threshColor || '#66bb6a'; ctx.font = 'bold 10px -apple-system';
+    ctx.textAlign = 'left'; ctx.fillText(threshLabel, pad.l + 4, ty - 5);
+  }
 
-    // Background bar
-    ctx.fillStyle = '#0d1520';
-    ctx.beginPath();
-    ctx.roundRect(padL, y, barW, barH, 6);
-    ctx.fill();
-
-    // Progress fill
-    const fillW = Math.max(0, Math.min(barW, barW * f.pct / 100));
-    ctx.fillStyle = f.ok ? 'rgba(102,187,106,0.7)' : 'rgba(255,152,0,0.5)';
-    ctx.beginPath();
-    ctx.roundRect(padL, y, fillW, barH, 6);
-    ctx.fill();
-
-    // Threshold marker line at 100%
-    if (!f.ok) {
-      const threshX = padL + barW;
-      ctx.strokeStyle = '#66bb6a88';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([4, 3]);
-      ctx.beginPath();
-      ctx.moveTo(threshX, y);
-      ctx.lineTo(threshX, y + barH);
-      ctx.stroke();
-      ctx.setLineDash([]);
+  // Shade the "good" zone
+  if (threshold !== null) {
+    ctx.fillStyle = 'rgba(102,187,106,0.08)';
+    if (above) {
+      ctx.fillRect(pad.l, pad.t, cw, y(threshold) - pad.t);
+    } else {
+      ctx.fillRect(pad.l, y(threshold), cw, pad.t + ch - y(threshold));
     }
+  }
 
-    // Value text inside bar
-    ctx.fillStyle = '#fff';
-    ctx.font = '12px -apple-system, system-ui';
-    ctx.textAlign = 'left';
-    const valText = f.ok ? '✓ ' + f.current + f.unit : f.current + f.unit + ' → need ' + f.target + f.unit;
-    ctx.fillText(valText, padL + 8, y + barH/2 + 4);
+  // Data line
+  ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  data.forEach((d, i) => { if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); });
+  ctx.stroke();
 
-    // Percentage on right
-    ctx.fillStyle = f.ok ? '#66bb6a' : '#ff9800';
-    ctx.font = 'bold 13px -apple-system, system-ui';
-    ctx.textAlign = 'left';
-    ctx.fillText(f.ok ? '✅' : Math.round(f.pct) + '%', padL + barW + 8, y + barH/2 + 5);
-  });
-})();
+  // Current value dot
+  const last = data[data.length - 1];
+  ctx.fillStyle = '#fff'; ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.arc(x(data.length - 1), y(last.v), 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 11px -apple-system'; ctx.textAlign = 'right';
+  ctx.fillText(last.v.toFixed(1), x(data.length - 1) - 8, y(last.v) - 8);
+
+  // X labels
+  ctx.fillStyle = '#445'; ctx.font = '9px -apple-system'; ctx.textAlign = 'center';
+  const step = Math.max(1, Math.floor(data.length / 5));
+  data.forEach((d, i) => { if (i % step === 0 || i === data.length - 1) ctx.fillText(d.d, x(i), H - 6); });
+}
+
+const dvol_data = [{"d": "02/28", "v": 55.2}, {"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 53.5}];
+const rv_data = [{"d": "02/23", "v": 68.1}, {"d": "02/24", "v": 67.6}, {"d": "02/25", "v": 72.0}, {"d": "02/26", "v": 72.0}, {"d": "02/27", "v": 70.8}, {"d": "02/28", "v": 71.2}, {"d": "03/01", "v": 68.3}, {"d": "03/02", "v": 70.5}, {"d": "03/03", "v": 70.1}, {"d": "03/04", "v": 73.6}, {"d": "03/05", "v": 72.8}, {"d": "03/06", "v": 59.9}, {"d": "03/07", "v": 50.2}, {"d": "03/08", "v": 50.1}, {"d": "03/09", "v": 50.5}, {"d": "03/10", "v": 50.8}, {"d": "03/11", "v": 50.2}, {"d": "03/12", "v": 50.1}, {"d": "03/13", "v": 49.3}, {"d": "03/14", "v": 47.6}, {"d": "03/15", "v": 47.5}, {"d": "03/16", "v": 48.3}, {"d": "03/17", "v": 48.3}, {"d": "03/18", "v": 50.0}, {"d": "03/19", "v": 49.7}, {"d": "03/20", "v": 49.8}, {"d": "03/21", "v": 49.6}, {"d": "03/22", "v": 50.6}, {"d": "03/23", "v": 51.8}, {"d": "03/24", "v": 50.0}];
+const pb_data = [{"d": "02/23", "v": 16.0}, {"d": "02/24", "v": 12.9}, {"d": "02/25", "v": 4.6}, {"d": "02/26", "v": 6.6}, {"d": "02/27", "v": 9.3}, {"d": "02/28", "v": 7.6}, {"d": "03/01", "v": 7.4}, {"d": "03/02", "v": 2.1}, {"d": "03/03", "v": 4.1}, {"d": "03/04", "v": 1.0}, {"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}];
+
+// DVOL chart: line = DVOL, threshold = SMA20 (need BELOW)
+drawChart('c1', dvol_data, 53.6, 'SMA20 = 53.6', false, '#5599cc', '#66bb6a');
+
+// VRP chart: compute VRP from DVOL - RV (aligned by date)
+const vrp_data = [];
+dvol_data.forEach((dv, i) => {
+  const rv = rv_data.find(r => r.d === dv.d);
+  if (rv) vrp_data.push({d: dv.d, v: Math.round((dv.v - rv.v) * 10) / 10});
+});
+drawChart('c2', vrp_data.length ? vrp_data : [{d:'—',v:0}], 5, 'VRP = 5 (min)', true, '#ff9800', '#66bb6a');
+
+// Pullback chart: threshold = 5%
+drawChart('c3', pb_data, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
-</div><div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:55</div>
+
+<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:59</div>
 <div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
