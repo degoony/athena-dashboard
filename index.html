@@ -26,19 +26,25 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait">
 <div style="font-size:40px">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (4 < 5); No valid expiry (DTE=19)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,869</div></div>
+<div><div class="label">BTC</div><div class="value">$66,857</div></div>
 <div><div class="label">Pullback</div><div class="value check">12.0% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value">53.5 ↓</div></div>
+<div><div class="label">DVOL</div><div class="value">53.6 ↓</div></div>
 <div><div class="label">SMA20</div><div class="value">53.6</div></div>
 <div><div class="label">RV</div><div class="value">50.0%</div></div>
 <div><div class="label">VRP</div><div class="value fail">3.5 ✗</div></div></div></div>
-<div class="card"><h2>Filters</h2>
-<div class="detail">✅ DVOL Falling (53.5 vs SMA 53.6)</div>
-<div class="detail">❌ VRP ≥ 5 (3.5 pts)</div>
-<div class="detail">✅ Pullback ≥ 5% (12.0% from $75,997)</div></div><div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:41</div>
+<div class="card"><h2>Entry Checklist</h2>
+<div class="detail">✅ <b>DVOL Falling</b> — DVOL (53.6) < 20d avg (53.6)<br>
+<span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
+<div class="detail">❌ <b>VRP ≥ 5</b> — Currently 3.5 pts (DVOL 53.6 minus RV 50.0)<br>
+<span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
+<div class="detail">✅ <b>Pullback ≥ 5%</b> — BTC is 12.0% below 20d high ($75,997)<br>
+<span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
+<div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
+<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
+</div></div><div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:52</div>
 <div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
