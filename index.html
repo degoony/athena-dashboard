@@ -28,8 +28,8 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:20px;font-weight:700;margin-top:8px">WAIT</div>
 <div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value">$66,858</div></div>
-<div><div class="label">Pullback</div><div class="value check">12.0% ✓</div></div></div></div>
+<div><div class="label">BTC</div><div class="value">$66,813</div></div>
+<div><div class="label">Pullback</div><div class="value check">12.1% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
 <div><div class="label">DVOL</div><div class="value">53.5 ↓</div></div>
 <div><div class="label">SMA20</div><div class="value">53.6</div></div>
@@ -40,30 +40,31 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
 <div class="detail">❌ <b>VRP ≥ 5</b> — Currently 3.5 pts (DVOL 53.5 minus RV 50.0)<br>
 <span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
-<div class="detail">✅ <b>Pullback ≥ 5%</b> — BTC is 12.0% below 20d high ($75,997)<br>
+<div class="detail">✅ <b>Pullback ≥ 5%</b> — BTC is 12.1% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
 <b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
 </div></div>
 
-<div class="card"><h2>📉 DVOL vs 20d SMA — Must be falling</h2>
-<div style="font-size:11px;color:#667;margin-bottom:8px">DVOL (blue) must drop below its 20-day average (dashed). When it crosses below = vol crush = time to sell.</div>
-<canvas id="c1" style="width:100%;height:160px"></canvas></div>
-
-<div class="card"><h2>📊 VRP (DVOL − RV) — Must be ≥ 5</h2>
-<div style="font-size:11px;color:#667;margin-bottom:8px">Gap between implied (DVOL) and realized vol. When ≥5 pts, options are overpriced vs actual moves. Green zone = write.</div>
-<canvas id="c2" style="width:100%;height:160px"></canvas></div>
-
-<div class="card"><h2>📉 Pullback from 20d High — Must be ≥ 5%</h2>
-<div style="font-size:11px;color:#667;margin-bottom:8px">How far BTC has dropped from its recent high. Selling calls after a pullback = safer entry, less likely to get blown through.</div>
-<canvas id="c3" style="width:100%;height:160px"></canvas></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+<div class="card" style="padding:12px"><h2 style="font-size:12px">📉 DVOL vs SMA</h2>
+<div style="font-size:10px;color:#667;margin-bottom:6px">Must be falling (below SMA)</div>
+<canvas id="c1" style="width:100%;aspect-ratio:1"></canvas></div>
+<div class="card" style="padding:12px"><h2 style="font-size:12px">📊 VRP (DVOL−RV)</h2>
+<div style="font-size:10px;color:#667;margin-bottom:6px">Must be ≥ 5 pts</div>
+<canvas id="c2" style="width:100%;aspect-ratio:1"></canvas></div>
+<div class="card" style="padding:12px"><h2 style="font-size:12px">📉 Pullback</h2>
+<div style="font-size:10px;color:#667;margin-bottom:6px">Must be ≥ 5% from 20d high</div>
+<canvas id="c3" style="width:100%;aspect-ratio:1"></canvas></div>
+</div>
 
 <script>
 function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || !data.length) return;
   const dpr = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || 320, H = 160;
+  const W = canvas.offsetWidth || 200;
+  const H = W;  // square
   canvas.width = W * dpr; canvas.height = H * dpr;
   canvas.style.height = H + 'px';
   const ctx = canvas.getContext('2d');
@@ -75,57 +76,54 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   const margin = (maxV - minV) * 0.15 || 5;
   minV -= margin; maxV += margin;
 
-  const pad = {t:20, r:45, b:28, l:8};
+  const pad = {t:22, r:42, b:24, l:6};
   const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
   const x = i => pad.l + (i / (data.length - 1)) * cw;
   const y = v => pad.t + (1 - (v - minV) / (maxV - minV)) * ch;
 
-  // Grid
+  // Grid + Y labels (white)
   ctx.strokeStyle = '#1a2d3d'; ctx.lineWidth = 0.5;
   for (let g = 0; g < 4; g++) {
     const gv = minV + (maxV - minV) * g / 3;
     ctx.beginPath(); ctx.moveTo(pad.l, y(gv)); ctx.lineTo(W - pad.r, y(gv)); ctx.stroke();
-    ctx.fillStyle = '#556'; ctx.font = '10px -apple-system';
-    ctx.textAlign = 'right'; ctx.fillText(gv.toFixed(1), W - pad.r + 38, y(gv) + 3);
+    ctx.fillStyle = '#ccc'; ctx.font = 'bold 11px -apple-system';
+    ctx.textAlign = 'right'; ctx.fillText(gv.toFixed(1), W - pad.r + 36, y(gv) + 4);
+  }
+
+  // Shade the "good" zone
+  if (threshold !== null) {
+    ctx.fillStyle = 'rgba(102,187,106,0.1)';
+    if (above) ctx.fillRect(pad.l, pad.t, cw, y(threshold) - pad.t);
+    else ctx.fillRect(pad.l, y(threshold), cw, pad.t + ch - y(threshold));
   }
 
   // Threshold line
   if (threshold !== null) {
     const ty = y(threshold);
-    ctx.strokeStyle = threshColor || '#66bb6a'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = threshColor || '#66bb6a'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
     ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
     ctx.setLineDash([]);
-    ctx.fillStyle = threshColor || '#66bb6a'; ctx.font = 'bold 10px -apple-system';
-    ctx.textAlign = 'left'; ctx.fillText(threshLabel, pad.l + 4, ty - 5);
-  }
-
-  // Shade the "good" zone
-  if (threshold !== null) {
-    ctx.fillStyle = 'rgba(102,187,106,0.08)';
-    if (above) {
-      ctx.fillRect(pad.l, pad.t, cw, y(threshold) - pad.t);
-    } else {
-      ctx.fillRect(pad.l, y(threshold), cw, pad.t + ch - y(threshold));
-    }
+    ctx.fillStyle = '#66bb6a'; ctx.font = 'bold 11px -apple-system';
+    ctx.textAlign = 'left'; ctx.fillText(threshLabel, pad.l + 3, ty - 6);
   }
 
   // Data line
-  ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2;
+  ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2.5;
   ctx.beginPath();
   data.forEach((d, i) => { if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); });
   ctx.stroke();
 
-  // Current value dot
+  // Current value dot + label (white, bold)
   const last = data[data.length - 1];
   ctx.fillStyle = '#fff'; ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.arc(x(data.length - 1), y(last.v), 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#fff'; ctx.font = 'bold 11px -apple-system'; ctx.textAlign = 'right';
-  ctx.fillText(last.v.toFixed(1), x(data.length - 1) - 8, y(last.v) - 8);
+  ctx.beginPath(); ctx.arc(x(data.length - 1), y(last.v), 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 13px -apple-system'; ctx.textAlign = 'right';
+  ctx.fillText(last.v.toFixed(1), x(data.length - 1) - 8, y(last.v) - 10);
 
-  // X labels
-  ctx.fillStyle = '#445'; ctx.font = '9px -apple-system'; ctx.textAlign = 'center';
-  const step = Math.max(1, Math.floor(data.length / 5));
-  data.forEach((d, i) => { if (i % step === 0 || i === data.length - 1) ctx.fillText(d.d, x(i), H - 6); });
+  // X labels (white)
+  ctx.fillStyle = '#aaa'; ctx.font = '10px -apple-system'; ctx.textAlign = 'center';
+  const step = Math.max(1, Math.floor(data.length / 4));
+  data.forEach((d, i) => { if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); });
 }
 
 const dvol_data = [{"d": "02/28", "v": 55.2}, {"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 53.5}];
@@ -147,7 +145,7 @@ drawChart('c2', vrp_data.length ? vrp_data : [{d:'—',v:0}], 5, 'VRP = 5 (min)'
 drawChart('c3', pb_data, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
-<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 20:59</div>
+<div style="text-align:center;font-size:11px;color:#556;margin-top:16px">Updated 2026-03-28 21:03</div>
 <div style="text-align:center;font-size:10px;color:#334;margin-top:4px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
