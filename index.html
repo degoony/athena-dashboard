@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Athena v2 Live</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, system-ui, sans-serif; background:#0f1923; color:#fff; padding:16px; }
+  .card { background:#1a2d3d; border-radius:12px; padding:16px; margin-bottom:12px; }
+  .label { font-size:11px; color:#8899aa; text-transform:uppercase; letter-spacing:1px; }
+  .value { font-size:24px; font-weight:700; margin-top:2px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .signal { text-align:center; padding:20px; border-radius:12px; }
+  .signal-write { background:#2e7d32; }
+  .signal-wait { background:#455a64; }
+  .signal-hold { background:#1565c0; }
+  .signal-pt { background:#e65100; }
+  .signal-recovery { background:#bf360c; }
+  .signal-icon { font-size:40px; }
+  .signal-text { font-size:20px; font-weight:700; margin-top:8px; }
+  .signal-reason { font-size:13px; opacity:0.85; margin-top:6px; line-height:1.4; }
+  .check { color:#66bb6a; } .fail { color:#ff9800; }
+  .detail { font-size:13px; color:#aab; padding:8px 0; border-bottom:1px solid #2a3d4d; }
+  .detail:last-child { border:none; }
+  h2 { font-size:14px; color:#5599cc; margin-bottom:10px; }
+  .timestamp { text-align:center; font-size:11px; color:#556; margin-top:16px; }
+</style>
+</head>
+<body>
+
+<div style="text-align:center;margin-bottom:16px;">
+  <div style="font-size:22px;font-weight:700;">ATHENA v2</div>
+  <div style="font-size:12px;color:#5599cc;">Live Signal Dashboard</div>
+</div>
+
+<div class="signal signal-wait">
+  <div class="signal-icon">⏸</div>
+  <div class="signal-text">WAIT</div>
+  <div class="signal-reason">Filters not met: VRP too low (3 < 5); No valid expiry (DTE=19)</div>
+</div>
+
+<div class="card">
+  <h2>Market Data</h2>
+  <div class="grid">
+    <div>
+      <div class="label">BTC Price</div>
+      <div class="value">$66,942</div>
+    </div>
+    <div>
+      <div class="label">Pullback</div>
+      <div class="value check">11.9% ✓</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Volatility</h2>
+  <div class="grid">
+    <div>
+      <div class="label">DVOL</div>
+      <div class="value">53.5 <span style="font-size:14px;">↓</span></div>
+    </div>
+    <div>
+      <div class="label">DVOL SMA20</div>
+      <div class="value">53.6</div>
+    </div>
+    <div>
+      <div class="label">RV (30d)</div>
+      <div class="value">50.0%</div>
+    </div>
+    <div>
+      <div class="label">VRP</div>
+      <div class="value fail">3.4 ✗</div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Entry Filters</h2>
+  <div class="detail">✅ DVOL Falling: Yes (DVOL 53.5 vs SMA 53.6)</div>
+  <div class="detail">❌ VRP ≥ 5: 3.4 pts</div>
+  <div class="detail">✅ Pullback ≥ 5%: 11.9% from $75,997 high</div>
+</div>
+
+<div class="timestamp">Updated 2026-03-28 20:24</div>
+<div class="timestamp" style="margin-top:4px;">Athena v2 · 5%OTM · VRP≥5 · DVOL falling · 5% pullback · PT60 · rec90</div>
+
+</body></html>
