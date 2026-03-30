@@ -32,7 +32,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:22px;font-weight:700">ATHENA v2</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
-<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-30 15:29</span>
+<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-30 15:34</span>
 <span id="liveBadge" class="live-badge">LIVE</span>
 <button class="btn-refresh" id="btnRefresh" onclick="refreshNow()">↻ Refresh</button>
 </div>
@@ -40,21 +40,21 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait" id="sigBanner">
 <div style="font-size:40px" id="sigIcon">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px" id="sigAction">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: DVOL not falling (55 >= SMA 54); VRP too low (4 < 5); No valid expiry (DTE=17)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: DVOL not falling (55 >= SMA 54); VRP too low (5 < 5); No valid expiry (DTE=17)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value" id="valBtc">$66,782</div></div>
-<div><div class="label">Pullback</div><div class="value check" id="valPb">12.1% ✓</div></div></div></div>
+<div><div class="label">BTC</div><div class="value" id="valBtc">$66,757</div></div>
+<div><div class="label">Pullback</div><div class="value check" id="valPb">12.2% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value" id="valDvol">54.5 ↑</div></div>
+<div><div class="label">DVOL</div><div class="value" id="valDvol">54.6 ↑</div></div>
 <div><div class="label">SMA20</div><div class="value" id="valSma">53.6</div></div>
 <div><div class="label">RV</div><div class="value" id="valRv">50.0%</div></div>
-<div><div class="label">VRP</div><div class="value fail" id="valVrp">4.5 ✗</div></div></div></div>
+<div><div class="label">VRP</div><div class="value fail" id="valVrp">4.6 ✗</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail" id="chkDvol">❌ <b>DVOL Falling</b> — DVOL (54.5) ≥ 20d avg (53.6)<br>
+<div class="detail" id="chkDvol">❌ <b>DVOL Falling</b> — DVOL (54.6) ≥ 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">❌ <b>VRP ≥ 5</b> — Currently 4.5 pts (DVOL 54.5 minus RV 50.0)<br>
+<div class="detail" id="chkVrp">❌ <b>VRP ≥ 5</b> — Currently 4.6 pts (DVOL 54.6 minus RV 50.0)<br>
 <span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
-<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 12.1% below 20d high ($75,997)<br>
+<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 12.2% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
 <b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
@@ -140,7 +140,7 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   data.forEach((d, i) => { if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); });
 }
 
-const BAKED = {"timestamp": "2026-03-30 15:29", "btc_spot": 66782, "dvol": 54.5, "dvol_sma20": 53.6, "dvol_falling": 0, "rv": 50.0, "vrp": 4.5, "vrp_ok": 0, "high_20d": 75997, "hist_dvol": [{"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 54.6}, {"d": "03/30", "v": 54.5}], "hist_rv": [{"d": "02/23", "v": 68.1}, {"d": "02/24", "v": 67.6}, {"d": "02/25", "v": 72.0}, {"d": "02/26", "v": 72.0}, {"d": "02/27", "v": 70.8}, {"d": "02/28", "v": 71.2}, {"d": "03/01", "v": 68.3}, {"d": "03/02", "v": 70.5}, {"d": "03/03", "v": 70.1}, {"d": "03/04", "v": 73.6}, {"d": "03/05", "v": 72.8}, {"d": "03/06", "v": 59.9}, {"d": "03/07", "v": 50.2}, {"d": "03/08", "v": 50.1}, {"d": "03/09", "v": 50.5}, {"d": "03/10", "v": 50.8}, {"d": "03/11", "v": 50.2}, {"d": "03/12", "v": 50.1}, {"d": "03/13", "v": 49.3}, {"d": "03/14", "v": 47.6}, {"d": "03/15", "v": 47.5}, {"d": "03/16", "v": 48.3}, {"d": "03/17", "v": 48.3}, {"d": "03/18", "v": 50.0}, {"d": "03/19", "v": 49.7}, {"d": "03/20", "v": 49.8}, {"d": "03/21", "v": 49.6}, {"d": "03/22", "v": 50.6}, {"d": "03/23", "v": 51.8}, {"d": "03/24", "v": 50.0}], "hist_btc": [{"d": "02/23", "v": 64563}, {"d": "02/24", "v": 64047}, {"d": "02/25", "v": 68945}, {"d": "02/26", "v": 67466}, {"d": "02/27", "v": 65527}, {"d": "02/28", "v": 66724}, {"d": "03/01", "v": 65678}, {"d": "03/02", "v": 69424}, {"d": "03/03", "v": 68033}, {"d": "03/04", "v": 73341}, {"d": "03/05", "v": 71142}, {"d": "03/06", "v": 68284}, {"d": "03/07", "v": 67449}, {"d": "03/08", "v": 67219}, {"d": "03/09", "v": 68982}, {"d": "03/10", "v": 70250}, {"d": "03/11", "v": 70650}, {"d": "03/12", "v": 70182}, {"d": "03/13", "v": 71357}, {"d": "03/14", "v": 70824}, {"d": "03/15", "v": 71741}, {"d": "03/16", "v": 74235}, {"d": "03/17", "v": 74540}, {"d": "03/18", "v": 71228}, {"d": "03/19", "v": 70492}, {"d": "03/20", "v": 70041}, {"d": "03/21", "v": 70448}, {"d": "03/22", "v": 68177}, {"d": "03/23", "v": 70899}, {"d": "03/24", "v": 69810}], "hist_pb": [{"d": "02/23", "v": 16.0}, {"d": "02/24", "v": 12.9}, {"d": "02/25", "v": 4.6}, {"d": "02/26", "v": 6.6}, {"d": "02/27", "v": 9.3}, {"d": "02/28", "v": 7.6}, {"d": "03/01", "v": 7.4}, {"d": "03/02", "v": 2.1}, {"d": "03/03", "v": 4.1}, {"d": "03/04", "v": 1.0}, {"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}], "pullback_pct": 12.1, "pullback_ok": 1, "next_expiry": "2026-04-17", "dte": 17, "strike": 70121, "est_premium": 1566, "est_prem_pct": 2.34, "position": {"status": "idle"}, "action": "WAIT", "reason": "Filters not met: DVOL not falling (55 >= SMA 54); VRP too low (4 < 5); No valid expiry (DTE=17)"};
+const BAKED = {"timestamp": "2026-03-30 15:34", "btc_spot": 66757, "dvol": 54.6, "dvol_sma20": 53.6, "dvol_falling": 0, "rv": 50.0, "vrp": 4.6, "vrp_ok": 0, "high_20d": 75997, "hist_dvol": [{"d": "03/01", "v": 55.1}, {"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 54.6}, {"d": "03/30", "v": 54.6}], "hist_rv": [{"d": "02/23", "v": 68.1}, {"d": "02/24", "v": 67.6}, {"d": "02/25", "v": 72.0}, {"d": "02/26", "v": 72.0}, {"d": "02/27", "v": 70.8}, {"d": "02/28", "v": 71.2}, {"d": "03/01", "v": 68.3}, {"d": "03/02", "v": 70.5}, {"d": "03/03", "v": 70.1}, {"d": "03/04", "v": 73.6}, {"d": "03/05", "v": 72.8}, {"d": "03/06", "v": 59.9}, {"d": "03/07", "v": 50.2}, {"d": "03/08", "v": 50.1}, {"d": "03/09", "v": 50.5}, {"d": "03/10", "v": 50.8}, {"d": "03/11", "v": 50.2}, {"d": "03/12", "v": 50.1}, {"d": "03/13", "v": 49.3}, {"d": "03/14", "v": 47.6}, {"d": "03/15", "v": 47.5}, {"d": "03/16", "v": 48.3}, {"d": "03/17", "v": 48.3}, {"d": "03/18", "v": 50.0}, {"d": "03/19", "v": 49.7}, {"d": "03/20", "v": 49.8}, {"d": "03/21", "v": 49.6}, {"d": "03/22", "v": 50.6}, {"d": "03/23", "v": 51.8}, {"d": "03/24", "v": 50.0}], "hist_btc": [{"d": "02/23", "v": 64563}, {"d": "02/24", "v": 64047}, {"d": "02/25", "v": 68945}, {"d": "02/26", "v": 67466}, {"d": "02/27", "v": 65527}, {"d": "02/28", "v": 66724}, {"d": "03/01", "v": 65678}, {"d": "03/02", "v": 69424}, {"d": "03/03", "v": 68033}, {"d": "03/04", "v": 73341}, {"d": "03/05", "v": 71142}, {"d": "03/06", "v": 68284}, {"d": "03/07", "v": 67449}, {"d": "03/08", "v": 67219}, {"d": "03/09", "v": 68982}, {"d": "03/10", "v": 70250}, {"d": "03/11", "v": 70650}, {"d": "03/12", "v": 70182}, {"d": "03/13", "v": 71357}, {"d": "03/14", "v": 70824}, {"d": "03/15", "v": 71741}, {"d": "03/16", "v": 74235}, {"d": "03/17", "v": 74540}, {"d": "03/18", "v": 71228}, {"d": "03/19", "v": 70492}, {"d": "03/20", "v": 70041}, {"d": "03/21", "v": 70448}, {"d": "03/22", "v": 68177}, {"d": "03/23", "v": 70899}, {"d": "03/24", "v": 69810}], "hist_pb": [{"d": "02/23", "v": 16.0}, {"d": "02/24", "v": 12.9}, {"d": "02/25", "v": 4.6}, {"d": "02/26", "v": 6.6}, {"d": "02/27", "v": 9.3}, {"d": "02/28", "v": 7.6}, {"d": "03/01", "v": 7.4}, {"d": "03/02", "v": 2.1}, {"d": "03/03", "v": 4.1}, {"d": "03/04", "v": 1.0}, {"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}], "pullback_pct": 12.2, "pullback_ok": 1, "next_expiry": "2026-04-17", "dte": 17, "strike": 70095, "est_premium": 1565, "est_prem_pct": 2.34, "position": {"status": "idle"}, "action": "WAIT", "reason": "Filters not met: DVOL not falling (55 >= SMA 54); VRP too low (5 < 5); No valid expiry (DTE=17)"};
 
 // Initial chart draw from baked data
 drawChart('c1', BAKED.hist_dvol, BAKED.dvol_sma20, 'SMA20 = '+BAKED.dvol_sma20, false, '#5599cc', '#66bb6a');
@@ -159,22 +159,50 @@ drawChart('c3', BAKED.hist_pb, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb
 </div>
 <script>
 
-// ── Deribit API (public, no auth) ──
-async function fetchJson(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error('API error ' + r.status);
-  return (await r.json()).result;
+// ── Deribit WebSocket API (no CORS issues) ──
+function deribitRPC(ws, method, params) {
+  return new Promise(function(resolve, reject) {
+    var id = Math.random().toString(36).substr(2);
+    var timer = setTimeout(function() { ws.removeEventListener('message', handler); reject(new Error('RPC timeout: '+method)); }, 15000);
+    var handler = function(event) {
+      var data = JSON.parse(event.data);
+      if (data.id === id) {
+        clearTimeout(timer);
+        ws.removeEventListener('message', handler);
+        if (data.error) reject(new Error(data.error.message));
+        else resolve(data.result);
+      }
+    };
+    ws.addEventListener('message', handler);
+    ws.send(JSON.stringify({jsonrpc:'2.0', method:method, params:params, id:id}));
+  });
 }
-async function fetchBtcSpot() {
-  return (await fetchJson('https://www.deribit.com/api/v2/public/get_index_price?index_name=btc_usd')).index_price;
-}
-async function fetchDvol() {
-  const now = Date.now(), start = now - 35*86400000;
-  return (await fetchJson('https://www.deribit.com/api/v2/public/get_volatility_index_data?currency=BTC&resolution=86400&start_timestamp='+start+'&end_timestamp='+now)).data;
-}
-async function fetchOhlc() {
-  const now = Math.floor(Date.now()/1000), start = now - 60*86400;
-  return await fetchJson('https://www.deribit.com/api/v2/public/get_tradingview_chart_data?instrument_name=BTC-PERPETUAL&resolution=D&start_timestamp='+start+'&end_timestamp='+now);
+async function fetchLiveData() {
+  var ws = new WebSocket('wss://www.deribit.com/ws/api/v2');
+  await new Promise(function(resolve, reject) {
+    ws.onopen = resolve;
+    ws.onerror = function() { reject(new Error('WebSocket connection failed')); };
+    setTimeout(function() { reject(new Error('Connection timeout')); }, 10000);
+  });
+  try {
+    var now = Date.now();
+    var results = await Promise.all([
+      deribitRPC(ws, 'public/get_index_price', {index_name:'btc_usd'}),
+      deribitRPC(ws, 'public/get_volatility_index_data', {
+        currency:'BTC', resolution:'86400',
+        start_timestamp: now - 35*86400000,
+        end_timestamp: now
+      }),
+      deribitRPC(ws, 'public/get_tradingview_chart_data', {
+        instrument_name:'BTC-PERPETUAL', resolution:'D',
+        start_timestamp: Math.floor((now - 60*86400000)/1000),
+        end_timestamp: Math.floor(now/1000)
+      })
+    ]);
+    return [results[0].index_price, results[1].data, results[2]];
+  } finally {
+    ws.close();
+  }
 }
 
 // ── Computation ──
@@ -275,7 +303,7 @@ async function refreshNow() {
   btn.innerHTML = '<span class="spinner"></span> Fetching\u2026';
   err.style.display = 'none';
   try {
-    var results = await Promise.all([fetchBtcSpot(), fetchDvol(), fetchOhlc()]);
+    var results = await fetchLiveData();
     var btcSpot = results[0], dvolRows = results[1], ohlc = results[2];
 
     var dvolToday = dvolRows[dvolRows.length-1][4];
