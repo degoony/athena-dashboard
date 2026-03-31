@@ -32,7 +32,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:22px;font-weight:700">ATHENA v2.1</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
-<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 08:46</span>
+<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 09:17</span>
 <span id="liveBadge" class="live-badge">LIVE</span>
 <button class="btn-refresh" id="btnRefresh" onclick="refreshNow()">↻ Refresh</button>
 </div>
@@ -42,22 +42,25 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:20px;font-weight:700;margin-top:8px" id="sigAction">WAIT</div>
 <div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: No valid expiry (DTE=16)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value" id="valBtc">$66,864</div></div>
-<div><div class="label">Pullback</div><div class="value check" id="valPb">12.0% ✓</div></div></div></div>
+<div><div class="label">BTC</div><div class="value" id="valBtc">$66,966</div></div>
+<div><div class="label">Pullback</div><div class="value check" id="valPb">11.9% ✓</div></div>
+<div><div class="label">MA200</div><div class="value check" id="valMa200">-26% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value" id="valDvol">53.3 ↓</div></div>
+<div><div class="label">DVOL</div><div class="value" id="valDvol">53.1 ↓</div></div>
 <div><div class="label">SMA20</div><div class="value" id="valSma">53.6</div></div>
 <div><div class="label">RV</div><div class="value" id="valRv">48.5%</div></div>
-<div><div class="label">VRP</div><div class="value check" id="valVrp">4.8 ✓</div></div></div></div>
+<div><div class="label">VRP</div><div class="value check" id="valVrp">4.6 ✓</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (53.3) < 20d avg (53.6)<br>
+<div class="detail" id="chkCb">✅ <b>Circuit Breaker</b> — BTC is -25.9% vs MA200 ($90,386), threshold: 40%<br>
+<span style="font-size:11px;color:#667">Rule 0: Suppress entry when BTC is overextended (>40% above 200-day MA). Prevents writing into runaway rallies.</span></div>
+<div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (53.1) < 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 4.8 pts (DVOL 53.3 minus RV 48.5)<br>
+<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 4.6 pts (DVOL 53.1 minus RV 48.5)<br>
 <span style="font-size:11px;color:#667">Vol risk premium (informational only — no VRP gate in v2.1). DVOL falling + pullback is sufficient.</span></div>
-<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 12.0% below 20d high ($75,997)<br>
+<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 11.9% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
-<b style="color:#5599cc">How it works:</b> DVOL falling + pullback must both be ✅ to write (no VRP gate). Sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 70% of its value → profit-take (buy it back). Then wait for BTC to fully recover to entry price before writing again (90-day timeout if recovery stalls).
+<b style="color:#5599cc">How it works:</b> CB off + DVOL falling + pullback must all pass to write. Circuit breaker blocks entry when BTC is overextended vs 200d MA. Sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 70% of its value → profit-take (buy it back). Then wait for BTC to fully recover to entry price before writing again (90-day timeout if recovery stalls).
 </div></div>
 
 <div class="card"><h2>Open Positions</h2>
@@ -66,18 +69,18 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <b>IBIT P37 04-17</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.53</div>
-<div><span style="color:#667">Mid</span><br>$1.27</div>
-<div><span style="color:#667">PT</span><br>17% / 70%</div>
-<div><span style="color:#667">OTM</span><br>2.4% · 16d</div>
+<div><span style="color:#667">Mid</span><br>$1.33</div>
+<div><span style="color:#667">PT</span><br>13% / 70%</div>
+<div><span style="color:#667">OTM</span><br>2.5% · 16d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <b>GBTC C60 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$2.59</div>
-<div><span style="color:#667">Mid</span><br>$1.05</div>
+<div><span style="color:#667">Mid</span><br>$1.02</div>
 <div><span style="color:#667">PT</span><br>60% / 70%</div>
-<div><span style="color:#667">OTM</span><br>15.3% · 44d</div>
+<div><span style="color:#667">OTM</span><br>15.1% · 44d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
@@ -86,21 +89,21 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div><span style="color:#667">Basis</span><br>$1.49</div>
 <div><span style="color:#667">Mid</span><br>$0.68</div>
 <div><span style="color:#667">PT</span><br>55% / 70%</div>
-<div><span style="color:#667">OTM</span><br>14.9% · 44d</div>
+<div><span style="color:#667">OTM</span><br>14.8% · 44d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <b>IBIT C44 05-15</b> <span style="color:#9c27b0;font-size:10px">ROTH</span> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.74</div>
-<div><span style="color:#667">Mid</span><br>$0.77</div>
-<div><span style="color:#667">PT</span><br>56% / 70%</div>
-<div><span style="color:#667">OTM</span><br>16.1% · 44d</div>
+<div><span style="color:#667">Mid</span><br>$0.71</div>
+<div><span style="color:#667">PT</span><br>59% / 70%</div>
+<div><span style="color:#667">OTM</span><br>15.9% · 44d</div>
 </div></div>
 <div style="margin-top:8px;padding:8px;background:#0d1520;border-radius:6px;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center">
 <div><span style="color:#667">Collected</span><br><b>$105,624</b></div>
-<div><span style="color:#667">Close Cost</span><br><b>$61,368</b></div>
-<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$44,256</b></div>
+<div><span style="color:#667">Close Cost</span><br><b>$61,743</b></div>
+<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$43,881</b></div>
 </div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
@@ -196,7 +199,7 @@ drawChart('c2', _vrp.length ? _vrp : [{{d:'—',v:0}}], 5, 'VRP = 5 (min)', true
 drawChart('c3', BAKED.hist_pb, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
-<div style="text-align:center;font-size:10px;color:#334;margin-top:16px">5%OTM · VRP≥5 · DVOL falling · pb5% · PT60 · rec90</div>
+<div style="text-align:center;font-size:10px;color:#334;margin-top:16px">CB40% · DVOL falling · pb5% · 5%OTM · PT70 · rec90</div>
 <div style="text-align:center;margin-top:20px">
 <a href="visualizer.html" style="display:inline-block;background:#1a3a5c;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:600;">📊 Full Visualizer</a>
 </div>
@@ -238,7 +241,7 @@ async function fetchLiveData() {
       }),
       deribitRPC(ws, 'public/get_tradingview_chart_data', {
         instrument_name:'BTC-PERPETUAL', resolution:'1D',
-        start_timestamp: now - 60*86400000,
+        start_timestamp: now - 250*86400000,
         end_timestamp: now
       })
     ]);
@@ -306,8 +309,8 @@ function bsCall(S,K,T,r,sig) {
 
 // ── DOM update ──
 var OTM=5, VRP_GATE=0, PB_MIN=5, PT_PCT=70, SPREAD_C=0.03, R_C=0.04, RECOVERY_TIMEOUT=90;
-var sigColors = {WRITE:'write',WAIT:'wait',HOLD:'hold',PT_NOW:'pt',RECOVERY_WAIT:'recovery',EXPIRY:'wait',RECOVERED:'write'};
-var sigIcons = {WRITE:'\u2705',WAIT:'\u23f8',HOLD:'\ud83d\udcca',PT_NOW:'\ud83d\udcb0',RECOVERY_WAIT:'\u23f3',EXPIRY:'\ud83d\udd14',RECOVERED:'\u2705'};
+var sigColors = {WRITE:'write',WAIT:'wait',HOLD:'hold',PT_NOW:'pt',RECOVERY_WAIT:'recovery',EXPIRY:'wait',RECOVERED:'write',CB_WAIT:'wait'};
+var sigIcons = {WRITE:'\u2705',WAIT:'\u23f8',HOLD:'\ud83d\udcca',PT_NOW:'\ud83d\udcb0',RECOVERY_WAIT:'\u23f3',EXPIRY:'\ud83d\udd14',RECOVERED:'\u2705',CB_WAIT:'\ud83d\udea8'};
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
 
 function updateUI(S) {
@@ -319,12 +322,22 @@ function updateUI(S) {
   var pbEl = document.getElementById('valPb');
   pbEl.textContent = S.pullback_pct.toFixed(1)+'% '+(S.pullback_ok?'\u2713':'\u2717');
   pbEl.className = 'value '+(S.pullback_ok?'check':'fail');
+  if (document.getElementById('valMa200') && S.pct_above_ma200 !== undefined) {
+    var ma200El = document.getElementById('valMa200');
+    ma200El.textContent = (S.pct_above_ma200>=0?'+':'')+S.pct_above_ma200.toFixed(0)+'% '+(S.cb_active?'\u26a0':'\u2713');
+    ma200El.className = 'value '+(S.cb_active?'fail':'check');
+  }
   document.getElementById('valDvol').textContent = S.dvol.toFixed(1)+' '+(S.dvol_falling?'\u2193':'\u2191');
   document.getElementById('valSma').textContent = S.dvol_sma20.toFixed(1);
   document.getElementById('valRv').textContent = S.rv.toFixed(1)+'%';
   var vrpEl = document.getElementById('valVrp');
   vrpEl.textContent = S.vrp.toFixed(1)+' '+(S.vrp_ok?'\u2713':'\u2717');
   vrpEl.className = 'value '+(S.vrp_ok?'check':'fail');
+  if (document.getElementById('chkCb') && S.cb_active !== undefined) {
+    document.getElementById('chkCb').innerHTML = (S.cb_active?'\ud83d\uded1':'\u2705')+
+      ' <b>Circuit Breaker</b> \u2014 BTC is '+(S.pct_above_ma200>=0?'+':'')+S.pct_above_ma200.toFixed(1)+
+      '% vs MA200 ($'+fmt(S.ma200)+'), threshold: 40%<br><span style="font-size:11px;color:#667">Rule 0: Suppress entry when BTC overextended.</span>';
+  }
   document.getElementById('chkDvol').innerHTML = (S.dvol_falling?'\u2705':'\u274c')+
     ' <b>DVOL Falling</b> \u2014 DVOL ('+S.dvol.toFixed(1)+') '+(S.dvol_falling?'<':'\u2265')+
     ' 20d avg ('+S.dvol_sma20.toFixed(1)+')<br><span style="font-size:11px;color:#667">Implied vol declining (vol crush).</span>';
@@ -361,6 +374,14 @@ async function refreshNow() {
     var vrp = dvolToday - rv;
     var vrpOk = vrp >= VRP_GATE;
     var pullbackOk = pullback >= PB_MIN;
+    // MA200 circuit breaker
+    var ma200 = 0, pctAboveMa200 = 0, cbActive = false;
+    if (closes.length >= 200) {
+      var sum200 = 0; for (var mi=closes.length-200; mi<closes.length; mi++) sum200 += closes[mi];
+      ma200 = sum200 / 200;
+      pctAboveMa200 = (btcSpot - ma200) / ma200 * 100;
+      cbActive = pctAboveMa200 > 40;
+    }
 
     var ntf = nextThirdFriday(new Date());
     var expiry = ntf.expiry, dte = ntf.dte;
@@ -387,14 +408,16 @@ async function refreshNow() {
       var timedOut = RECOVERY_TIMEOUT > 0 && recDays >= RECOVERY_TIMEOUT;
       if (btcSpot >= rt || timedOut) {
         var recReason = timedOut ? 'Recovery timed out ('+recDays+'d)' : 'BTC recovered to $'+fmt(btcSpot);
-        if (dvolFalling && pullbackOk) { action='WRITE'; reason=recReason+' + filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE.'; }
+        if (cbActive) { action='CB_WAIT'; reason=recReason+' but CB active \u2014 BTC '+pctAboveMa200.toFixed(1)+'% above MA200.'; }
+        else if (dvolFalling && pullbackOk) { action='WRITE'; reason=recReason+' + filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE.'; }
         else { action='RECOVERED'; reason=recReason+'. Ready when filters pass.'; }
       } else { action='RECOVERY_WAIT'; reason='Waiting for BTC to recover to $'+fmt(rt)+' (day '+recDays+'/'+RECOVERY_TIMEOUT+').'; }
     } else {
-      if (dvolFalling && pullbackOk && dte >= 25) {
+      if (dvolFalling && pullbackOk && !cbActive && dte >= 25) {
         action='WRITE'; reason='All filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE, ~$'+fmt(estPrem)+' ('+(estPrem/btcSpot*100).toFixed(1)+'%).';
       } else {
         var f = [];
+        if (cbActive) f.push('CB: BTC '+pctAboveMa200.toFixed(1)+'% above MA200 (>40%)');
         if (!dvolFalling) f.push('DVOL not falling ('+dvolToday.toFixed(0)+' >= SMA '+dvolSma20.toFixed(0)+')');
         if (!pullbackOk) f.push('Pullback '+pullback.toFixed(1)+'% < '+PB_MIN+'%');
         if (dte < 25) f.push('No valid expiry (DTE='+dte+')');
@@ -406,6 +429,7 @@ async function refreshNow() {
       btc_spot:Math.round(btcSpot), dvol:Math.round(dvolToday*10)/10, dvol_sma20:Math.round(dvolSma20*10)/10,
       dvol_falling:dvolFalling, rv:Math.round(rv*10)/10, vrp:Math.round(vrp*10)/10, vrp_ok:vrpOk,
       high_20d:Math.round(high20d), pullback_pct:Math.round(pullback*10)/10, pullback_ok:pullbackOk,
+      ma200:Math.round(ma200), pct_above_ma200:Math.round(pctAboveMa200*10)/10, cb_active:cbActive,
       action:action, reason:reason, position:pos
     };
     updateUI(liveS);
