@@ -32,7 +32,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:22px;font-weight:700">ATHENA v2.1</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
-<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 11:30</span>
+<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 11:43</span>
 <span id="liveBadge" class="live-badge">LIVE</span>
 <button class="btn-refresh" id="btnRefresh" onclick="refreshNow()">↻ Refresh</button>
 </div>
@@ -42,20 +42,20 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:20px;font-weight:700;margin-top:8px" id="sigAction">WAIT</div>
 <div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: No valid expiry (DTE=16)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value" id="valBtc">$67,688</div></div>
+<div><div class="label">BTC</div><div class="value" id="valBtc">$67,750</div></div>
 <div><div class="label">Pullback</div><div class="value check" id="valPb">10.9% ✓</div></div>
 <div><div class="label">MA200</div><div class="value check" id="valMa200">-25% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
 <div><div class="label">DVOL</div><div class="value" id="valDvol">52.8 ↓</div></div>
 <div><div class="label">SMA20</div><div class="value" id="valSma">53.6</div></div>
 <div><div class="label">RV</div><div class="value" id="valRv">48.5%</div></div>
-<div><div class="label">VRP</div><div class="value check" id="valVrp">4.3 ✓</div></div></div></div>
+<div><div class="label">VRP</div><div class="value check" id="valVrp">4.2 ✓</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail" id="chkCb">✅ <b>Circuit Breaker</b> — BTC is -25.1% vs MA200 ($90,389), threshold: 40%<br>
+<div class="detail" id="chkCb">✅ <b>Circuit Breaker</b> — BTC is -25.0% vs MA200 ($90,390), threshold: 40%<br>
 <span style="font-size:11px;color:#667">Rule 0: Suppress entry when BTC is overextended (>40% above 200-day MA). Prevents writing into runaway rallies.</span></div>
 <div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (52.8) < 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 4.3 pts (DVOL 52.8 minus RV 48.5)<br>
+<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 4.2 pts (DVOL 52.8 minus RV 48.5)<br>
 <span style="font-size:11px;color:#667">Vol risk premium (informational only — no VRP gate in v2.1). DVOL falling + pullback is sufficient.</span></div>
 <div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 10.9% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
@@ -78,20 +78,6 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <span>0%</span><span style="color:#ff9800">30% target</span><span>40% max</span></div>
 <div style="padding:8px;background:#0d1520;border-radius:6px;font-size:12px;color:#66bb6a;text-align:center">Coverage at or above target</div>
 </div>
-<div class="card"><h2>Account Routing</h2>
-<div style="padding:4px 10px;font-size:12px;display:flex;justify-content:space-between">
-<span>ROTH IRA</span><span style="color:#8899aa">16.5 BTC-eq</span>
-<span style="color:#66bb6a">TAX-FREE</span></div>
-<div style="padding:4px 10px;font-size:12px;display:flex;justify-content:space-between">
-<span>Rollover IRA</span><span style="color:#8899aa">22.4 BTC-eq</span>
-<span style="color:#ff9800">37% tax</span></div>
-<div style="padding:4px 10px;font-size:12px;display:flex;justify-content:space-between">
-<span>SEP-IRA</span><span style="color:#8899aa">2.4 BTC-eq</span>
-<span style="color:#ff9800">37% tax</span></div>
-<div style="padding:4px 10px;font-size:12px;display:flex;justify-content:space-between">
-<span>TRADING</span><span style="color:#8899aa">20.1 BTC-eq</span>
-<span style="color:#ff6b6b">54% tax</span></div>
-</div>
 <div class="card"><h2>Override Log</h2>
 <div style="padding:6px;background:#2a1a00;border:1px solid #ff9800;border-radius:6px;font-size:12px;margin-bottom:6px;color:#ff9800">Yesterday was WAIT — did you write anyway?</div>
 </div>
@@ -101,8 +87,8 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <b>IBIT P37 04-17</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.54</div>
-<div><span style="color:#667">Mid</span><br>$1.20</div>
-<div><span style="color:#667">PT</span><br>22% / 70%</div>
+<div><span style="color:#667">Mid</span><br>$1.15</div>
+<div><span style="color:#667">PT</span><br>25% / 70%</div>
 <div><span style="color:#667">OTM</span><br>3.6% · 16d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
@@ -112,16 +98,16 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div><span style="color:#667">Basis</span><br>$2.60</div>
 <div><span style="color:#667">Mid</span><br>$1.25</div>
 <div><span style="color:#667">PT</span><br>52% / 70%</div>
-<div><span style="color:#667">OTM</span><br>13.9% · 44d</div>
+<div><span style="color:#667">OTM</span><br>13.8% · 44d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <b>BTC C34 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.50</div>
-<div><span style="color:#667">Mid</span><br>$0.50</div>
-<div><span style="color:#667">PT</span><br>67% / 70%</div>
-<div><span style="color:#667">OTM</span><br>13.4% · 44d</div>
+<div><span style="color:#667">Mid</span><br>$0.82</div>
+<div><span style="color:#667">PT</span><br>45% / 70%</div>
+<div><span style="color:#667">OTM</span><br>13.5% · 44d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
@@ -134,8 +120,8 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 </div></div>
 <div style="margin-top:8px;padding:8px;background:#0d1520;border-radius:6px;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center">
 <div><span style="color:#667">Collected</span><br><b>$106,210</b></div>
-<div><span style="color:#667">Close Cost</span><br><b>$61,285</b></div>
-<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$44,925</b></div>
+<div><span style="color:#667">Close Cost</span><br><b>$61,752</b></div>
+<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$44,458</b></div>
 </div>
 </div>
 <div class="card"><h2>P&L Ledger</h2>
