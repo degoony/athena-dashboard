@@ -93,7 +93,7 @@ if(typeof LIVE !== 'undefined' && LIVE.action) {
   if(L.position && L.position.status === 'open') {
     positionHtml = `<div style="margin-top:8px;padding:8px 12px;background:#e3f2fd;border-radius:6px;font-size:12px;">
       <b>Open Position:</b> Strike $${L.position.strike.toLocaleString()} | Expiry ${L.position.expiry} | Entry $${L.position.entry_premium.toLocaleString()} premium
-      ${L.profit_pct !== undefined ? ' | PT: ' + L.profit_pct + '% (trigger at ' + ${PT_PCT || 60} + '%)' : ''}
+      ${L.profit_pct !== undefined ? ' | PT: ' + L.profit_pct + '% (trigger at ' + ${PT_PCT || 70} + '%)' : ''}
       ${L.rem_dte !== undefined ? ' | ' + L.rem_dte + ' DTE' : ''}
     </div>`;
   } else if(L.position && L.position.status === 'recovery_wait') {

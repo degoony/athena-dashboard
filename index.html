@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Athena v2</title>
+<title>Athena v2.1</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Athena">
@@ -29,7 +29,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 .err-msg{color:#ff6b6b;font-size:12px;text-align:center;margin-top:6px;display:none}
 </style></head><body>
 <div style="text-align:center;margin-bottom:16px">
-<div style="font-size:22px;font-weight:700">ATHENA v2</div>
+<div style="font-size:22px;font-weight:700">ATHENA v2.1</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
 <span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-30 20:53</span>
@@ -52,12 +52,12 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="card"><h2>Entry Checklist</h2>
 <div class="detail" id="chkDvol">❌ <b>DVOL Falling</b> — DVOL (54.4) ≥ 20d avg (53.7)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">✅ <b>VRP ≥ 5</b> — Currently 2.1 pts (DVOL 54.4 minus RV 52.3)<br>
-<span style="font-size:11px;color:#667">Vol risk premium must be wide enough. Market is pricing in more fear than realized — options are overpriced relative to actual moves.</span></div>
+<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 2.1 pts (DVOL 54.4 minus RV 52.3)<br>
+<span style="font-size:11px;color:#667">Vol risk premium (informational only — no VRP gate in v2.1). DVOL falling + pullback is sufficient.</span></div>
 <div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 10.9% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
-<b style="color:#5599cc">How it works:</b> All 3 must be ✅ to write. When signal = WRITE, sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 60% of its value → profit-take (buy it back). Then wait for BTC to recover to 90% of entry price before writing again.
+<b style="color:#5599cc">How it works:</b> DVOL falling + pullback must both be ✅ to write (no VRP gate). Sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 70% of its value → profit-take (buy it back). Then wait for BTC to fully recover to entry price before writing again (90-day timeout if recovery stalls).
 </div></div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
@@ -262,7 +262,7 @@ function bsCall(S,K,T,r,sig) {
 }
 
 // ── DOM update ──
-var OTM=5, VRP_GATE=5, PB_MIN=5, PT_PCT=60, SPREAD_C=0.03, R_C=0.04;
+var OTM=5, VRP_GATE=0, PB_MIN=5, PT_PCT=70, SPREAD_C=0.03, R_C=0.04, RECOVERY_TIMEOUT=90;
 var sigColors = {WRITE:'write',WAIT:'wait',HOLD:'hold',PT_NOW:'pt',RECOVERY_WAIT:'recovery',EXPIRY:'wait',RECOVERED:'write'};
 var sigIcons = {WRITE:'\u2705',WAIT:'\u23f8',HOLD:'\ud83d\udcca',PT_NOW:'\ud83d\udcb0',RECOVERY_WAIT:'\u23f3',EXPIRY:'\ud83d\udd14',RECOVERED:'\u2705'};
 function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
@@ -285,9 +285,9 @@ function updateUI(S) {
   document.getElementById('chkDvol').innerHTML = (S.dvol_falling?'\u2705':'\u274c')+
     ' <b>DVOL Falling</b> \u2014 DVOL ('+S.dvol.toFixed(1)+') '+(S.dvol_falling?'<':'\u2265')+
     ' 20d avg ('+S.dvol_sma20.toFixed(1)+')<br><span style="font-size:11px;color:#667">Implied vol declining (vol crush).</span>';
-  document.getElementById('chkVrp').innerHTML = (S.vrp_ok?'\u2705':'\u274c')+
-    ' <b>VRP \u2265 5</b> \u2014 Currently '+S.vrp.toFixed(1)+' pts (DVOL '+S.dvol.toFixed(1)+
-    ' minus RV '+S.rv.toFixed(1)+')<br><span style="font-size:11px;color:#667">Vol risk premium must be wide enough.</span>';
+  document.getElementById('chkVrp').innerHTML = '\u2139\ufe0f'+
+    ' <b>VRP</b> \u2014 Currently '+S.vrp.toFixed(1)+' pts (DVOL '+S.dvol.toFixed(1)+
+    ' minus RV '+S.rv.toFixed(1)+')<br><span style="font-size:11px;color:#667">Vol risk premium (informational \u2014 no VRP gate in v2.1).</span>';
   document.getElementById('chkPb').innerHTML = (S.pullback_ok?'\u2705':'\u274c')+
     ' <b>Pullback \u2265 5%</b> \u2014 BTC is '+S.pullback_pct.toFixed(1)+'% below 20d high ($'+
     fmt(S.high_20d)+')<br><span style="font-size:11px;color:#667">Must have pulled back from recent highs.</span>';
@@ -339,17 +339,20 @@ async function refreshNow() {
       else { action='HOLD'; reason='Position open. PT at '+PT_PCT+'%, currently '+pp.toFixed(0)+'%. '+rd+' DTE.'; }
     } else if (pos.status === 'recovery_wait') {
       var rt = pos.recovery_target || 0;
-      if (btcSpot >= rt) {
-        if (dvolFalling && vrpOk && pullbackOk) { action='WRITE'; reason='Recovered + all filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE.'; }
-        else { action='RECOVERED'; reason='BTC $'+fmt(btcSpot)+' >= target $'+fmt(rt)+'. Ready if filters pass.'; }
-      } else { action='RECOVERY_WAIT'; reason='Waiting for BTC to recover to $'+fmt(rt)+'.'; }
+      var recStart = pos.recovery_start ? new Date(pos.recovery_start) : null;
+      var recDays = recStart ? Math.floor((new Date() - recStart) / 86400000) : 0;
+      var timedOut = RECOVERY_TIMEOUT > 0 && recDays >= RECOVERY_TIMEOUT;
+      if (btcSpot >= rt || timedOut) {
+        var recReason = timedOut ? 'Recovery timed out ('+recDays+'d)' : 'BTC recovered to $'+fmt(btcSpot);
+        if (dvolFalling && pullbackOk) { action='WRITE'; reason=recReason+' + filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE.'; }
+        else { action='RECOVERED'; reason=recReason+'. Ready when filters pass.'; }
+      } else { action='RECOVERY_WAIT'; reason='Waiting for BTC to recover to $'+fmt(rt)+' (day '+recDays+'/'+RECOVERY_TIMEOUT+').'; }
     } else {
-      if (dvolFalling && vrpOk && pullbackOk && dte >= 25) {
+      if (dvolFalling && pullbackOk && dte >= 25) {
         action='WRITE'; reason='All filters pass! Write '+OTM+'% OTM at $'+fmt(strike)+', '+dte+' DTE, ~$'+fmt(estPrem)+' ('+(estPrem/btcSpot*100).toFixed(1)+'%).';
       } else {
         var f = [];
         if (!dvolFalling) f.push('DVOL not falling ('+dvolToday.toFixed(0)+' >= SMA '+dvolSma20.toFixed(0)+')');
-        if (!vrpOk) f.push('VRP too low ('+vrp.toFixed(0)+' < '+VRP_GATE+')');
         if (!pullbackOk) f.push('Pullback '+pullback.toFixed(1)+'% < '+PB_MIN+'%');
         if (dte < 25) f.push('No valid expiry (DTE='+dte+')');
         action='WAIT'; reason='Filters not met: '+f.join('; ');
