@@ -32,7 +32,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:22px;font-weight:700">ATHENA v2.1</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
-<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-30 20:53</span>
+<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 07:04</span>
 <span id="liveBadge" class="live-badge">LIVE</span>
 <button class="btn-refresh" id="btnRefresh" onclick="refreshNow()">↻ Refresh</button>
 </div>
@@ -40,26 +40,42 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait" id="sigBanner">
 <div style="font-size:40px" id="sigIcon">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px" id="sigAction">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: DVOL not falling (54 >= SMA 54); No valid expiry (DTE=17)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: No valid expiry (DTE=16)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value" id="valBtc">$67,682</div></div>
-<div><div class="label">Pullback</div><div class="value check" id="valPb">10.9% ✓</div></div></div></div>
+<div><div class="label">BTC</div><div class="value" id="valBtc">$67,265</div></div>
+<div><div class="label">Pullback</div><div class="value check" id="valPb">11.5% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value" id="valDvol">54.4 ↑</div></div>
-<div><div class="label">SMA20</div><div class="value" id="valSma">53.7</div></div>
-<div><div class="label">RV</div><div class="value" id="valRv">52.3%</div></div>
-<div><div class="label">VRP</div><div class="value check" id="valVrp">2.1 ✓</div></div></div></div>
+<div><div class="label">DVOL</div><div class="value" id="valDvol">53.5 ↓</div></div>
+<div><div class="label">SMA20</div><div class="value" id="valSma">53.6</div></div>
+<div><div class="label">RV</div><div class="value" id="valRv">48.4%</div></div>
+<div><div class="label">VRP</div><div class="value check" id="valVrp">5.0 ✓</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail" id="chkDvol">❌ <b>DVOL Falling</b> — DVOL (54.4) ≥ 20d avg (53.7)<br>
+<div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (53.5) < 20d avg (53.6)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 2.1 pts (DVOL 54.4 minus RV 52.3)<br>
+<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 5.0 pts (DVOL 53.5 minus RV 48.4)<br>
 <span style="font-size:11px;color:#667">Vol risk premium (informational only — no VRP gate in v2.1). DVOL falling + pullback is sufficient.</span></div>
-<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 10.9% below 20d high ($75,997)<br>
+<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 11.5% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
 <b style="color:#5599cc">How it works:</b> DVOL falling + pullback must both be ✅ to write (no VRP gate). Sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 70% of its value → profit-take (buy it back). Then wait for BTC to fully recover to entry price before writing again (90-day timeout if recovery stalls).
 </div></div>
 
+<div class="card"><h2>Open Positions</h2>
+<div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<b>IBIT P37 04-17</b> <span style="color:#66bb6a">HOLD</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
+<div><span style="color:#667">Basis</span><br>$1.53</div>
+<div><span style="color:#667">Mid</span><br>$1.35</div>
+<div><span style="color:#667">PT</span><br>11% / 70%</div>
+<div><span style="color:#667">OTM</span><br>3.0% · 16d</div>
+</div></div>
+<div style="margin-top:8px;padding:8px;background:#0d1520;border-radius:6px;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center">
+<div><span style="color:#667">Collected</span><br><b>$40,545</b></div>
+<div><span style="color:#667">Close Cost</span><br><b>$35,775</b></div>
+<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$4,770</b></div>
+</div>
+</div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
 <div class="card" style="padding:12px"><h2 style="font-size:12px">📉 DVOL vs SMA</h2>
 <div style="font-size:10px;color:#667;margin-bottom:6px">Must be falling (below SMA)</div>
@@ -73,7 +89,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 </div>
 
 <script>
-function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {
+function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {{
   const canvas = document.getElementById(canvasId);
   if (!canvas || !data.length) return;
   const dpr = window.devicePixelRatio || 1;
@@ -90,41 +106,41 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   const margin = (maxV - minV) * 0.15 || 5;
   minV -= margin; maxV += margin;
 
-  const pad = {t:22, r:42, b:24, l:6};
+  const pad = {{t:22, r:42, b:24, l:6}};
   const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
   const x = i => pad.l + (i / (data.length - 1)) * cw;
   const y = v => pad.t + (1 - (v - minV) / (maxV - minV)) * ch;
 
   // Grid + Y labels (white)
   ctx.strokeStyle = '#1a2d3d'; ctx.lineWidth = 0.5;
-  for (let g = 0; g < 4; g++) {
+  for (let g = 0; g < 4; g++) {{
     const gv = minV + (maxV - minV) * g / 3;
     ctx.beginPath(); ctx.moveTo(pad.l, y(gv)); ctx.lineTo(W - pad.r, y(gv)); ctx.stroke();
     ctx.fillStyle = '#ccc'; ctx.font = 'bold 11px -apple-system';
     ctx.textAlign = 'right'; ctx.fillText(gv.toFixed(1), W - pad.r + 36, y(gv) + 4);
-  }
+  }}
 
   // Shade the "good" zone
-  if (threshold !== null) {
+  if (threshold !== null) {{
     ctx.fillStyle = 'rgba(102,187,106,0.1)';
     if (above) ctx.fillRect(pad.l, pad.t, cw, y(threshold) - pad.t);
     else ctx.fillRect(pad.l, y(threshold), cw, pad.t + ch - y(threshold));
-  }
+  }}
 
   // Threshold line
-  if (threshold !== null) {
+  if (threshold !== null) {{
     const ty = y(threshold);
     ctx.strokeStyle = threshColor || '#66bb6a'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
     ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = '#66bb6a'; ctx.font = 'bold 11px -apple-system';
     ctx.textAlign = 'left'; ctx.fillText(threshLabel, pad.l + 3, ty - 6);
-  }
+  }}
 
   // Data line
   ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2.5;
   ctx.beginPath();
-  data.forEach((d, i) => { if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); });
+  data.forEach((d, i) => {{ if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); }});
   ctx.stroke();
 
   // Current value dot + label (white, bold)
@@ -137,19 +153,19 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   // X labels (white)
   ctx.fillStyle = '#aaa'; ctx.font = '10px -apple-system'; ctx.textAlign = 'center';
   const step = Math.max(1, Math.floor(data.length / 4));
-  data.forEach((d, i) => { if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); });
-}
+  data.forEach((d, i) => {{ if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); }});
+}}
 
-const BAKED = {"timestamp": "2026-03-30 20:53", "btc_spot": 67682, "dvol": 54.4, "dvol_sma20": 53.7, "dvol_falling": 0, "rv": 52.3, "vrp": 2.1, "vrp_ok": true, "high_20d": 75997, "hist_dvol": [{"d": "03/02", "v": 53.4}, {"d": "03/03", "v": 55.4}, {"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 54.6}, {"d": "03/30", "v": 55.3}, {"d": "03/31", "v": 54.4}], "hist_rv": [{"d": "03/02", "v": 82.4}, {"d": "03/03", "v": 82.3}, {"d": "03/04", "v": 86.2}, {"d": "03/05", "v": 86.2}, {"d": "03/06", "v": 85.9}, {"d": "03/07", "v": 69.9}, {"d": "03/08", "v": 58.5}, {"d": "03/09", "v": 59.1}, {"d": "03/10", "v": 59.1}, {"d": "03/11", "v": 59.2}, {"d": "03/12", "v": 58.5}, {"d": "03/13", "v": 58.5}, {"d": "03/14", "v": 57.6}, {"d": "03/15", "v": 55.5}, {"d": "03/16", "v": 56.5}, {"d": "03/17", "v": 56.2}, {"d": "03/18", "v": 58.6}, {"d": "03/19", "v": 58.4}, {"d": "03/20", "v": 58.0}, {"d": "03/21", "v": 58.0}, {"d": "03/22", "v": 59.0}, {"d": "03/23", "v": 60.5}, {"d": "03/24", "v": 60.6}, {"d": "03/24", "v": 58.4}, {"d": "03/25", "v": 58.5}, {"d": "03/26", "v": 53.3}, {"d": "03/27", "v": 53.8}, {"d": "03/28", "v": 52.8}, {"d": "03/29", "v": 52.6}, {"d": "03/30", "v": 52.3}], "hist_btc": [{"d": "03/02", "v": 69424}, {"d": "03/03", "v": 68033}, {"d": "03/04", "v": 73341}, {"d": "03/05", "v": 71142}, {"d": "03/06", "v": 68284}, {"d": "03/07", "v": 67449}, {"d": "03/08", "v": 67219}, {"d": "03/09", "v": 68982}, {"d": "03/10", "v": 70250}, {"d": "03/11", "v": 70650}, {"d": "03/12", "v": 70182}, {"d": "03/13", "v": 71357}, {"d": "03/14", "v": 70824}, {"d": "03/15", "v": 71741}, {"d": "03/16", "v": 74235}, {"d": "03/17", "v": 74540}, {"d": "03/18", "v": 71228}, {"d": "03/19", "v": 70492}, {"d": "03/20", "v": 70041}, {"d": "03/21", "v": 70448}, {"d": "03/22", "v": 68177}, {"d": "03/23", "v": 70899}, {"d": "03/24", "v": 69810}, {"d": "03/24", "v": 70921}, {"d": "03/25", "v": 70080}, {"d": "03/26", "v": 68522}, {"d": "03/27", "v": 66503}, {"d": "03/28", "v": 66658}, {"d": "03/29", "v": 67586}, {"d": "03/30", "v": 67702}], "hist_pb": [{"d": "03/02", "v": 2.1}, {"d": "03/03", "v": 4.1}, {"d": "03/04", "v": 1.0}, {"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}, {"d": "03/24", "v": 6.7}, {"d": "03/25", "v": 7.8}, {"d": "03/26", "v": 9.8}, {"d": "03/27", "v": 12.5}, {"d": "03/28", "v": 12.3}, {"d": "03/29", "v": 11.1}, {"d": "03/30", "v": 10.9}], "pullback_pct": 10.9, "pullback_ok": 1, "next_expiry": "2026-04-17", "dte": 17, "strike": 71066, "est_premium": 1705, "est_prem_pct": 2.52, "position": {"status": "idle"}, "action": "WAIT", "reason": "Filters not met: DVOL not falling (54 >= SMA 54); No valid expiry (DTE=17)"};
+const BAKED = {json.dumps(clean(signal))};
 
 // Initial chart draw from baked data
 drawChart('c1', BAKED.hist_dvol, BAKED.dvol_sma20, 'SMA20 = '+BAKED.dvol_sma20, false, '#5599cc', '#66bb6a');
 const _vrp = [];
-BAKED.hist_dvol.forEach(function(dv) {
-  const rv = BAKED.hist_rv.find(function(r) { return r.d === dv.d; });
-  if (rv) _vrp.push({d: dv.d, v: Math.round((dv.v - rv.v) * 10) / 10});
-});
-drawChart('c2', _vrp.length ? _vrp : [{d:'—',v:0}], 5, 'VRP = 5 (min)', true, '#ff9800', '#66bb6a');
+BAKED.hist_dvol.forEach(function(dv) {{
+  const rv = BAKED.hist_rv.find(function(r) {{ return r.d === dv.d; }});
+  if (rv) _vrp.push({{d: dv.d, v: Math.round((dv.v - rv.v) * 10) / 10}});
+}});
+drawChart('c2', _vrp.length ? _vrp : [{{d:'—',v:0}}], 5, 'VRP = 5 (min)', true, '#ff9800', '#66bb6a');
 drawChart('c3', BAKED.hist_pb, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
