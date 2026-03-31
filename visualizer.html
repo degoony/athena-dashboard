@@ -1391,7 +1391,7 @@ function buildWaterfall() {
       m._trades.push(w); m._count++;
     }
   });
-  const aggWF = Array.from(monthAgg.values());
+  const aggWF = Array.from(monthAgg.values()).filter(w => w.outcome !== 'NO POSITION');
 
   let totalPremIn = 0, totalCosts = 0;
 
