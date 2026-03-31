@@ -1490,12 +1490,12 @@ buildWaterfall();
         <ul style="margin:2px 0 8px 20px;padding:0;">
           <li>DVOL is <b>falling</b> — below its 20-day average (vol crush)</li>
           <li>BTC has <b>pulled back ${c.pullback_from_high_pct||5}%+</b> from its 20-day high</li>
-          <li>VRP is <b>${c.vrp_gate||5}+ points</b> (DVOL exceeds realized vol)</li>
+          ${c.vrp_gate ? `<li>VRP is <b>${c.vrp_gate}+ points</b> (DVOL exceeds realized vol)</li>` : ''}
         </ul>
         <div style="margin-bottom:4px;"><b>Management:</b></div>
         <ul style="margin:2px 0 8px 20px;padding:0;">
-          <li><b>Profit-take at ${c.profit_take_pct||60}%</b> — close when option value drops to ${100-(c.profit_take_pct||60)}% of entry premium</li>
-          <li><b>Recovery wait at ${100-(c.pt_recovery_pct||3)}%</b> — don't re-enter until BTC recovers to ${100-(c.pt_recovery_pct||3)}% of entry price</li>
+          <li><b>Profit-take at ${c.profit_take_pct != null ? c.profit_take_pct : 60}%</b> — close when option value drops to ${100-(c.profit_take_pct != null ? c.profit_take_pct : 60)}% of entry premium</li>
+          <li><b>Recovery wait at ${c.pt_recovery_pct === 0 ? '100' : (100-(c.pt_recovery_pct||3))}%</b> — don't re-enter until BTC recovers to ${c.pt_recovery_pct === 0 ? '100' : (100-(c.pt_recovery_pct||3))}% of entry price${c.recovery_max_days ? ` (${c.recovery_max_days}-day timeout)` : ''}</li>
           <li>Otherwise hold to expiry. No rolling. No stop-loss.</li>
         </ul>
         <div style="font-style:italic;color:#666;font-size:11px;">All premiums priced at realized vol (zero VRP). Real-world VRP adds ~5-8%/yr on top.</div>
@@ -1549,8 +1549,8 @@ buildWaterfall();
       <div style="background:#fff8f0;border-radius:8px;padding:14px 16px;border:1px solid #e8d4b8;">
         <div style="font-weight:700;margin-bottom:6px;color:#b45309;">MODEL LIMITATIONS</div>
         <ul style="margin:0;padding-left:18px;font-size:12px;">
-          <li>27 trades over 5 years — 2-3 different outcomes could swing results ±2%/yr</li>
-          <li>In-sample only — no out-of-sample validation (no DVOL data pre-2021)</li>
+          <li>${s.n_trades} trades over ${s.years.toFixed(0)} years — 2-3 different outcomes could swing results ±2%/yr</li>
+          <li>Walk-forward validated (train→test), but no DVOL data pre-2021</li>
           <li>Zero-VRP is conservative — real premiums include VRP (+5-8%/yr additional)</li>
           <li>Call IV skew: live OTM calls ~2 pts below DVOL (not modeled)</li>
           <li>105 BTC notional at 5% OTM is a large order — liquidity/slippage risk</li>
@@ -1572,8 +1572,8 @@ buildWaterfall();
             <td style="padding:4px 8px;color:#666;">5% OTM when DVOL high, 7% when moderate</td>
           </tr>
           <tr style="background:#fff8e1;border-bottom:1px solid var(--border);">
-            <td style="padding:4px 8px;">5%OTM+VRP5 + rec98/100</td>
-            <td style="padding:4px 8px;color:#666;">Tighter recovery on the new champion</td>
+            <td style="padding:4px 8px;">IV skew adjustment</td>
+            <td style="padding:4px 8px;color:#666;">5% OTM calls ~2-3 IV pts below DVOL — calibrate from live data</td>
           </tr>
           <tr style="background:#fff8e1;border-bottom:1px solid var(--border);">
             <td style="padding:4px 8px;">Out-of-sample stress test</td>
@@ -1604,15 +1604,15 @@ buildWaterfall();
           <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ VRP gate alone (useless as timing filter)</td></tr>
           <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Seasonal skip Oct/Nov (marginal +0.4%)</td></tr>
           <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Coverage scaling (linear, no risk-adj benefit)</td></tr>
-          <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ PT threshold sweep (40-80%, 60 optimal)</td></tr>
-          <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Recovery % (95-100%, 97 optimal)</td></tr>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ PT threshold sweep (40-80%, 70 optimal)</td></tr>
+          <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Recovery % (95-100%, full + 90d timeout optimal)</td></tr>
           <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Call IV skew (-2 to -3 pts, rankings stable)</td></tr>
           <tr style="border-bottom:1px solid #eee;"><td style="padding:3px 8px;">✓ Put overlay (impossible — no cash)</td></tr>
         </table>
       </div>
     </div>
     <div style="margin-top:12px;font-size:12px;color:#666;font-style:italic;">
-      211 strategies tested across 19 sessions (S12-S19). Zero-VRP pricing isolates true alpha from VRP harvest.
+      243 strategies tested across 23 sessions (S12-S23). Zero-VRP pricing isolates true alpha from VRP harvest.
     </div>
   `;
 }
