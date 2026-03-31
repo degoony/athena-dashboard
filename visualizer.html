@@ -1323,7 +1323,6 @@ window.addEventListener('resize', () => { drawPriceChart(); drawCumChart(); draw
           <th colspan="4" style="padding:4px 8px;color:var(--dim);font-size:9px;border-left:1px solid var(--border);">CASH FLOW</th>
           <th colspan="4" style="padding:4px 8px;color:var(--dim);font-size:9px;border-left:1px solid var(--border);">MONTHLY RETURN</th>
           <th colspan="3" style="padding:4px 8px;color:var(--dim);font-size:9px;border-left:1px solid var(--border);">CUMULATIVE</th>
-          <th colspan="4" style="padding:4px 8px;color:var(--dim);font-size:9px;border-left:2px solid #2a5a8c;background:#f0f4f8;">ANNUALIZED</th>
         </tr>
         <tr style="border-bottom:2px solid var(--border);text-align:right;">
           <th style="text-align:left;padding:4px 8px;color:var(--dim);font-size:10px;">#</th>
@@ -1344,10 +1343,6 @@ window.addEventListener('resize', () => { drawPriceChart(); drawCumChart(); draw
           <th style="padding:4px 8px;color:var(--dim);font-size:10px;border-left:1px solid var(--border);font-weight:700;">STRAT</th>
           <th style="padding:4px 8px;color:var(--dim);font-size:10px;">B&H</th>
           <th style="padding:4px 8px;color:var(--dim);font-size:10px;font-weight:700;">ALPHA</th>
-          <th style="padding:4px 8px;color:var(--dim);font-size:10px;border-left:2px solid #2a5a8c;background:#f0f4f8;">YIELD</th>
-          <th style="padding:4px 8px;color:var(--dim);font-size:10px;background:#f0f4f8;">STRAT</th>
-          <th style="padding:4px 8px;color:var(--dim);font-size:10px;background:#f0f4f8;">B&H</th>
-          <th style="padding:4px 8px;color:var(--dim);font-size:10px;font-weight:700;background:#f0f4f8;">ALPHA</th>
         </tr>
       </thead>
       <tbody id="wfBody"></tbody>
@@ -1402,7 +1397,6 @@ function buildWaterfall() {
   const aggWF = Array.from(monthAgg.values()).filter(w => w.outcome !== 'NO POSITION');
 
   let totalPremIn = 0, totalCosts = 0;
-  const startDate = new Date(WF[0].ym + '-01');
 
   aggWF.forEach(w => {
     const premIn = w.flows.filter(f => f.type === 'in').reduce((s,f) => s + f.amount, 0);
@@ -1433,20 +1427,6 @@ function buildWaterfall() {
       <td style="${bdr}font-weight:700;" class="${cls(w.cum_strat_pct||0)}">${pctFmt(w.cum_strat_pct||0)}</td>
       <td class="${cls(w.cum_bh_pct||0)}">${pctFmt(w.cum_bh_pct||0)}</td>
       <td style="font-weight:700;" class="${cls(w.variance_pct||0)}">${pctFmt(w.variance_pct||0)}</td>
-      ${(function(){
-        const endDate = new Date(w.ym + '-28');
-        const yrs = Math.max((endDate - startDate) / (365.25*86400000), 0.25);
-        const annYield = (w.cum_cash / (s.avg_btc * yrs) * 100);
-        const annStrat = (Math.pow(1 + (w.cum_strat_pct||0)/100, 1/yrs) - 1) * 100;
-        const annBH = (Math.pow(1 + (w.cum_bh_pct||0)/100, 1/yrs) - 1) * 100;
-        const annAlpha = annStrat - annBH;
-        const abdr = 'border-left:2px solid #2a5a8c;background:#f8fafe;';
-        const abg = 'background:#f8fafe;';
-        return `<td style="${abdr}" class="${cls(annYield)}">${annYield>0?'+':''}${annYield.toFixed(1)}%</td>`
-          + `<td style="${abg}font-weight:700;" class="${cls(annStrat)}">${annStrat>0?'+':''}${annStrat.toFixed(1)}%</td>`
-          + `<td style="${abg}" class="${cls(annBH)}">${annBH>0?'+':''}${annBH.toFixed(1)}%</td>`
-          + `<td style="${abg}font-weight:700;" class="${cls(annAlpha)}">${annAlpha>0?'+':''}${annAlpha.toFixed(1)}%</td>`;
-      })()}
     `;
     tr.addEventListener('click', () => {
       document.querySelectorAll('#waterfall tbody tr').forEach(r => r.classList.remove('wf-selected'));
@@ -1469,22 +1449,21 @@ function buildWaterfall() {
     <td class="neg">-$${totalCosts.toLocaleString()}</td>
     <td class="${cls(last.cum_cash)}">${sign(last.cum_cash)}</td>
     <td style="font-weight:700;">${lastBtc.toFixed(4)}</td>
-    <td style="border-left:1px solid var(--border);"></td><td></td><td></td><td></td>
+    ${(function(){
+      const annBH = ((1+last.cum_bh_pct/100)**(1/s.years)-1)*100;
+      const annPrem = totalPremIn / (s.avg_btc * s.years) * 100;
+      const annCost = totalCosts / (s.avg_btc * s.years) * 100;
+      const annStrat = ((1+last.cum_strat_pct/100)**(1/s.years)-1)*100;
+      const annAlpha = annStrat - annBH;
+      const bdr = 'border-left:1px solid var(--border);';
+      return `<td style="${bdr}font-weight:700;" class="${cls(annBH)}">${annBH>0?'+':''}${annBH.toFixed(1)}%/yr</td>`
+        + `<td class="pos">+${annPrem.toFixed(1)}%/yr</td>`
+        + `<td class="neg">-${annCost.toFixed(1)}%/yr</td>`
+        + `<td style="font-weight:700;" class="${cls(annStrat)}">${annStrat>0?'+':''}${annStrat.toFixed(1)}%/yr</td>`;
+    })()}
     <td style="border-left:1px solid var(--border);font-weight:700;" class="${cls(last.cum_strat_pct||last.portfolio_ret)}">${pctFmtF(last.cum_strat_pct||last.portfolio_ret)}</td>
     <td class="${cls(last.cum_bh_pct||0)}">${pctFmtF(last.cum_bh_pct||0)}</td>
     <td style="font-weight:700;" class="${cls(last.variance_pct||0)}">${pctFmtF(last.variance_pct||0)}</td>
-    ${(function(){
-      const annY = s.yield_on_avg;
-      const annS = (Math.pow(1+last.cum_strat_pct/100, 1/s.years)-1)*100;
-      const annB = (Math.pow(1+last.cum_bh_pct/100, 1/s.years)-1)*100;
-      const annA = annS - annB;
-      const abdr = 'border-left:2px solid #2a5a8c;background:#f0f4f8;';
-      const abg = 'background:#f0f4f8;';
-      return `<td style="${abdr}font-weight:700;" class="${cls(annY)}">+${annY}%</td>`
-        + `<td style="${abg}font-weight:700;" class="${cls(annS)}">${annS>0?'+':''}${annS.toFixed(1)}%</td>`
-        + `<td style="${abg}" class="${cls(annB)}">${annB>0?'+':''}${annB.toFixed(1)}%</td>`
-        + `<td style="${abg}font-weight:700;" class="${cls(annA)}">${annA>0?'+':''}${annA.toFixed(1)}%</td>`;
-    })()}
   </tr>`;
 }
 
