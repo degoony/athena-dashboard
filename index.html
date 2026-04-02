@@ -32,7 +32,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="font-size:22px;font-weight:700">ATHENA v2.1</div>
 <div style="font-size:12px;color:#5599cc">Live Signal Dashboard</div></div>
 <div class="status-bar">
-<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-03-31 21:59</span>
+<span id="tsMain" style="font-size:13px;color:#8899aa">Updated 2026-04-02 09:22</span>
 <span id="liveBadge" class="live-badge">LIVE</span>
 <button class="btn-refresh" id="btnRefresh" onclick="refreshNow()">↻ Refresh</button>
 </div>
@@ -40,47 +40,47 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="signal signal-wait" id="sigBanner">
 <div style="font-size:40px" id="sigIcon">⏸</div>
 <div style="font-size:20px;font-weight:700;margin-top:8px" id="sigAction">WAIT</div>
-<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: No valid expiry (DTE=16)</div></div>
+<div style="font-size:13px;opacity:0.85;margin-top:6px;line-height:1.4" id="sigReason">Filters not met: No valid expiry (DTE=14)</div></div>
 <div class="card"><h2>Market Data</h2><div class="grid">
-<div><div class="label">BTC</div><div class="value" id="valBtc">$68,234</div></div>
-<div><div class="label">Pullback</div><div class="value check" id="valPb">10.2% ✓</div></div>
-<div><div class="label">MA200</div><div class="value check" id="valMa200">-24% ✓</div></div></div></div>
+<div><div class="label">BTC</div><div class="value" id="valBtc">$66,904</div></div>
+<div><div class="label">Pullback</div><div class="value check" id="valPb">12.0% ✓</div></div>
+<div><div class="label">MA200</div><div class="value check" id="valMa200">-26% ✓</div></div></div></div>
 <div class="card"><h2>Volatility</h2><div class="grid">
-<div><div class="label">DVOL</div><div class="value" id="valDvol">52.7 ↓</div></div>
-<div><div class="label">SMA20</div><div class="value" id="valSma">53.5</div></div>
-<div><div class="label">RV</div><div class="value" id="valRv">48.7%</div></div>
-<div><div class="label">VRP</div><div class="value check" id="valVrp">4.0 ✓</div></div></div></div>
+<div><div class="label">DVOL</div><div class="value" id="valDvol">52.2 ↓</div></div>
+<div><div class="label">SMA20</div><div class="value" id="valSma">53.4</div></div>
+<div><div class="label">RV</div><div class="value" id="valRv">41.1%</div></div>
+<div><div class="label">VRP</div><div class="value check" id="valVrp">11.2 ✓</div></div></div></div>
 <div class="card"><h2>Entry Checklist</h2>
-<div class="detail" id="chkCb">✅ <b>Circuit Breaker</b> — BTC is -24.5% vs MA200 ($90,392), threshold: 40%<br>
+<div class="detail" id="chkCb">✅ <b>Circuit Breaker</b> — BTC is -25.6% vs MA200 ($89,907), threshold: 40%<br>
 <span style="font-size:11px;color:#667">Rule 0: Suppress entry when BTC is overextended (>40% above 200-day MA). Prevents writing into runaway rallies.</span></div>
-<div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (52.7) < 20d avg (53.5)<br>
+<div class="detail" id="chkDvol">✅ <b>DVOL Falling</b> — DVOL (52.2) < 20d avg (53.4)<br>
 <span style="font-size:11px;color:#667">Implied vol must be declining (vol crush). Means fear is peaking and dissipating — premiums still rich but risk falling.</span></div>
-<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 4.0 pts (DVOL 52.7 minus RV 48.7)<br>
+<div class="detail" id="chkVrp">ℹ️ <b>VRP</b> — Currently 11.2 pts (DVOL 52.2 minus RV 41.1)<br>
 <span style="font-size:11px;color:#667">Vol risk premium (informational only — no VRP gate in v2.1). DVOL falling + pullback is sufficient.</span></div>
-<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 10.2% below 20d high ($75,997)<br>
+<div class="detail" id="chkPb">✅ <b>Pullback ≥ 5%</b> — BTC is 12.0% below 20d high ($75,997)<br>
 <span style="font-size:11px;color:#667">BTC must have pulled back from recent highs. Writing near the top = highest risk of getting blown through. Pullback = safer entry.</span></div>
 <div style="margin-top:10px;padding:10px;background:#0d1520;border-radius:8px;font-size:12px;line-height:1.5;color:#8899aa">
 <b style="color:#5599cc">How it works:</b> CB off + DVOL falling + pullback must all pass to write. Circuit breaker blocks entry when BTC is overextended vs 200d MA. Sell a 5% OTM call expiring on the next 3rd Friday (25-40 DTE). After writing, if the option loses 70% of its value → profit-take (buy it back). Then wait for BTC to fully recover to entry price before writing again (90-day timeout if recovery stalls).
 </div></div>
 
 <div class="card"><h2>Strike Ladder</h2>
-<div style="font-size:11px;color:#8899aa;margin-bottom:8px">Next expiry: 2026-04-17 (16d) | Zero-VRP pricing</div>
+<div style="font-size:11px;color:#8899aa;margin-bottom:8px">Next expiry: 2026-04-17 (14d) | Zero-VRP pricing</div>
 <div style="overflow-x:auto"><table style="width:100%;font-size:12px;border-collapse:collapse">
 <tr style="color:#5599cc;border-bottom:1px solid #2a3d4d"><th style="text-align:left;padding:4px">OTM</th><th style="text-align:right;padding:4px">Strike</th><th style="text-align:right;padding:4px">Prem</th><th style="text-align:right;padding:4px">Yld/mo</th><th style="text-align:right;padding:4px">Delta</th><th style="text-align:right;padding:4px">P(ITM)</th></tr>
-<tr style=""><td style="padding:4px">3%</td><td style="text-align:right;padding:4px">$70,281</td><td style="text-align:right;padding:4px">$1,898</td><td style="text-align:right;padding:4px">2.78%</td><td style="text-align:right;padding:4px">0.41</td><td style="text-align:right;padding:4px">37%</td></tr>
-<tr style="background:#0a2a0a;"><td style="padding:4px">5%</td><td style="text-align:right;padding:4px">$71,645</td><td style="text-align:right;padding:4px">$1,451</td><td style="text-align:right;padding:4px">2.13%</td><td style="text-align:right;padding:4px">0.34</td><td style="text-align:right;padding:4px">30% ←</td></tr>
-<tr style=""><td style="padding:4px">7%</td><td style="text-align:right;padding:4px">$73,010</td><td style="text-align:right;padding:4px">$1,090</td><td style="text-align:right;padding:4px">1.60%</td><td style="text-align:right;padding:4px">0.28</td><td style="text-align:right;padding:4px">24%</td></tr>
-<tr style=""><td style="padding:4px">10%</td><td style="text-align:right;padding:4px">$75,057</td><td style="text-align:right;padding:4px">$688</td><td style="text-align:right;padding:4px">1.01%</td><td style="text-align:right;padding:4px">0.19</td><td style="text-align:right;padding:4px">17%</td></tr>
+<tr style=""><td style="padding:4px">3%</td><td style="text-align:right;padding:4px">$68,912</td><td style="text-align:right;padding:4px">$1,316</td><td style="text-align:right;padding:4px">1.97%</td><td style="text-align:right;padding:4px">0.38</td><td style="text-align:right;padding:4px">35%</td></tr>
+<tr style="background:#0a2a0a;"><td style="padding:4px">5%</td><td style="text-align:right;padding:4px">$70,250</td><td style="text-align:right;padding:4px">$920</td><td style="text-align:right;padding:4px">1.37%</td><td style="text-align:right;padding:4px">0.29</td><td style="text-align:right;padding:4px">27% ←</td></tr>
+<tr style=""><td style="padding:4px">7%</td><td style="text-align:right;padding:4px">$71,588</td><td style="text-align:right;padding:4px">$624</td><td style="text-align:right;padding:4px">0.93%</td><td style="text-align:right;padding:4px">0.22</td><td style="text-align:right;padding:4px">19%</td></tr>
+<tr style=""><td style="padding:4px">10%</td><td style="text-align:right;padding:4px">$73,595</td><td style="text-align:right;padding:4px">$329</td><td style="text-align:right;padding:4px">0.49%</td><td style="text-align:right;padding:4px">0.13</td><td style="text-align:right;padding:4px">11%</td></tr>
 </table></div>
 <div style="font-size:10px;color:#556;margin-top:6px">Prem = Black-Scholes at RV, 3% spread. Live DVOL pricing ~36% higher.</div>
 </div>
 <div class="card"><h2>Regime Context</h2>
-<div style="text-align:center;margin-bottom:10px"><span style="font-size:20px;font-weight:700;color:#5599cc">NEUTRAL</span> <span style="color:#667;font-size:13px">(62/100)</span></div>
+<div style="text-align:center;margin-bottom:10px"><span style="font-size:20px;font-weight:700;color:#66bb6a">FAVORABLE</span> <span style="color:#667;font-size:13px">(75/100)</span></div>
 <div style="font-size:12px">
-<div class="detail"><b>Funding</b> <span style="float:right;color:#8899aa">8.6% ann — neutral</span></div>
-<div class="detail"><b>Term Structure</b> <span style="float:right;color:#8899aa">-0.2pts — flat</span></div>
-<div class="detail"><b>Skew</b> <span style="float:right;color:#8899aa">2.1pts — narrow</span></div>
-<div class="detail"><b>DVOL Percentile</b> <span style="float:right;color:#66bb6a">81th — fat premiums</span></div>
+<div class="detail"><b>Funding</b> <span style="float:right;color:#8899aa">-0.1% ann — neutral</span></div>
+<div class="detail"><b>Term Structure</b> <span style="float:right;color:#66bb6a">8.2pts — contango</span></div>
+<div class="detail"><b>Skew</b> <span style="float:right;color:#8899aa">2.6pts — narrow</span></div>
+<div class="detail"><b>DVOL Percentile</b> <span style="float:right;color:#66bb6a">79th — fat premiums</span></div>
 </div></div>
 <div class="card"><h2>Sizing</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:10px">
@@ -106,7 +106,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="flex:1;height:8px;background:#0d1520;border-radius:4px;overflow:hidden">
 <div style="width:48%;height:100%;background:#9c27b0;border-radius:4px"></div></div>
 <span style="font-size:11px;color:#aab;min-width:40px;text-align:right">48%</span></div>
-<div style="font-size:10px;color:#667;margin-top:2px">7.9 / 16.4 BTC-eq · 8.5 available</div>
+<div style="font-size:10px;color:#667;margin-top:2px">7.9 / 16.5 BTC-eq · 8.5 available</div>
 </div>
 <div style="padding:6px 0;border-bottom:1px solid #1a2a3a">
 <div style="display:flex;justify-content:space-between;align-items:center">
@@ -116,7 +116,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="flex:1;height:8px;background:#0d1520;border-radius:4px;overflow:hidden">
 <div style="width:0%;height:100%;background:#1565c0;border-radius:4px"></div></div>
 <span style="font-size:11px;color:#aab;min-width:40px;text-align:right">0%</span></div>
-<div style="font-size:10px;color:#667;margin-top:2px">0.0 / 22.2 BTC-eq · 22.2 available</div>
+<div style="font-size:10px;color:#667;margin-top:2px">0.0 / 22.4 BTC-eq · 22.4 available</div>
 </div>
 <div style="padding:6px 0;border-bottom:1px solid #1a2a3a">
 <div style="display:flex;justify-content:space-between;align-items:center">
@@ -136,10 +136,10 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div style="flex:1;height:8px;background:#0d1520;border-radius:4px;overflow:hidden">
 <div style="width:61%;height:100%;background:#ff9800;border-radius:4px"></div></div>
 <span style="font-size:11px;color:#aab;min-width:40px;text-align:right">61%</span></div>
-<div style="font-size:10px;color:#667;margin-top:2px">12.1 / 19.9 BTC-eq · 7.8 available</div>
+<div style="font-size:10px;color:#667;margin-top:2px">12.2 / 20.1 BTC-eq · 7.8 available</div>
 </div>
 <div style="margin-top:8px;padding:8px;background:#0d1520;border-radius:6px;font-size:12px;text-align:center">
-<b>20.0</b> / <b>60.9</b> BTC-eq covered <span style="color:#5599cc">(32.9%)</span></div>
+<b>20.2</b> / <b>61.3</b> BTC-eq covered <span style="color:#5599cc">(32.9%)</span></div>
 </div>
 <div class="card"><h2>Override Log</h2>
 <div style="padding:6px;background:#2a1a00;border:1px solid #ff9800;border-radius:6px;font-size:12px;margin-bottom:6px;color:#ff9800">Yesterday was WAIT — did you write anyway?</div>
@@ -154,44 +154,44 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 <div class="card"><h2>Open Positions</h2>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<b>IBIT P37 04-17</b> <span style="color:#66bb6a">HOLD</span></div>
+<b>IBIT P37.0 04-17</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.54</div>
-<div><span style="color:#667">Mid</span><br>$1.03</div>
-<div><span style="color:#667">PT</span><br>33% / 70%</div>
-<div><span style="color:#667">OTM</span><br>3.7% · 16d</div>
+<div><span style="color:#667">Mid</span><br>$1.15</div>
+<div><span style="color:#667">PT</span><br>25% / 70%</div>
+<div><span style="color:#667">OTM</span><br>2.5% · 14d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<b>GBTC C60 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
+<b>GBTC C60.0 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$2.60</div>
-<div><span style="color:#667">Mid</span><br>$1.30</div>
-<div><span style="color:#667">PT</span><br>50% / 70%</div>
-<div><span style="color:#667">OTM</span><br>13.7% · 44d</div>
+<div><span style="color:#667">Mid</span><br>$0.92</div>
+<div><span style="color:#667">PT</span><br>64% / 70%</div>
+<div><span style="color:#667">OTM</span><br>15.2% · 42d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<b>BTC C34 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
+<b>BTC C34.0 05-15</b> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.50</div>
-<div><span style="color:#667">Mid</span><br>$0.65</div>
-<div><span style="color:#667">PT</span><br>57% / 70%</div>
-<div><span style="color:#667">OTM</span><br>13.4% · 44d</div>
+<div><span style="color:#667">Mid</span><br>$0.80</div>
+<div><span style="color:#667">PT</span><br>47% / 70%</div>
+<div><span style="color:#667">OTM</span><br>14.8% · 42d</div>
 </div></div>
 <div class="detail" style="border-left:3px solid #1565c0;padding-left:10px">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<b>IBIT C44 05-15</b> <span style="color:#9c27b0;font-size:10px">ROTH</span> <span style="color:#66bb6a">HOLD</span></div>
+<b>IBIT C44.0 05-15</b> <span style="color:#9c27b0;font-size:10px">ROTH</span> <span style="color:#66bb6a">HOLD</span></div>
 <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px;font-size:12px">
 <div><span style="color:#667">Basis</span><br>$1.75</div>
-<div><span style="color:#667">Mid</span><br>$0.81</div>
-<div><span style="color:#667">PT</span><br>54% / 70%</div>
-<div><span style="color:#667">OTM</span><br>14.5% · 44d</div>
+<div><span style="color:#667">Mid</span><br>$0.64</div>
+<div><span style="color:#667">PT</span><br>64% / 70%</div>
+<div><span style="color:#667">OTM</span><br>15.9% · 42d</div>
 </div></div>
 <div style="margin-top:8px;padding:8px;background:#0d1520;border-radius:6px;font-size:12px;display:grid;grid-template-columns:1fr 1fr 1fr;text-align:center">
 <div><span style="color:#667">Collected</span><br><b>$106,210</b></div>
-<div><span style="color:#667">Close Cost</span><br><b>$58,525</b></div>
-<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$47,685</b></div>
+<div><span style="color:#667">Close Cost</span><br><b>$55,415</b></div>
+<div><span style="color:#667">P&L</span><br><b style="color:#66bb6a">$50,795</b></div>
 </div>
 </div>
 <div class="card"><h2>P&L Ledger</h2>
@@ -267,7 +267,7 @@ h2{font-size:14px;color:#5599cc;margin-bottom:10px}
 </div>
 
 <script>
-function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {{
+function drawChart(canvasId, data, threshold, threshLabel, above, color, threshColor) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || !data.length) return;
   const dpr = window.devicePixelRatio || 1;
@@ -284,41 +284,41 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   const margin = (maxV - minV) * 0.15 || 5;
   minV -= margin; maxV += margin;
 
-  const pad = {{t:22, r:42, b:24, l:6}};
+  const pad = {t:22, r:42, b:24, l:6};
   const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
   const x = i => pad.l + (i / (data.length - 1)) * cw;
   const y = v => pad.t + (1 - (v - minV) / (maxV - minV)) * ch;
 
   // Grid + Y labels (white)
   ctx.strokeStyle = '#1a2d3d'; ctx.lineWidth = 0.5;
-  for (let g = 0; g < 4; g++) {{
+  for (let g = 0; g < 4; g++) {
     const gv = minV + (maxV - minV) * g / 3;
     ctx.beginPath(); ctx.moveTo(pad.l, y(gv)); ctx.lineTo(W - pad.r, y(gv)); ctx.stroke();
     ctx.fillStyle = '#ccc'; ctx.font = 'bold 11px -apple-system';
     ctx.textAlign = 'right'; ctx.fillText(gv.toFixed(1), W - pad.r + 36, y(gv) + 4);
-  }}
+  }
 
   // Shade the "good" zone
-  if (threshold !== null) {{
+  if (threshold !== null) {
     ctx.fillStyle = 'rgba(102,187,106,0.1)';
     if (above) ctx.fillRect(pad.l, pad.t, cw, y(threshold) - pad.t);
     else ctx.fillRect(pad.l, y(threshold), cw, pad.t + ch - y(threshold));
-  }}
+  }
 
   // Threshold line
-  if (threshold !== null) {{
+  if (threshold !== null) {
     const ty = y(threshold);
     ctx.strokeStyle = threshColor || '#66bb6a'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
     ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = '#66bb6a'; ctx.font = 'bold 11px -apple-system';
     ctx.textAlign = 'left'; ctx.fillText(threshLabel, pad.l + 3, ty - 6);
-  }}
+  }
 
   // Data line
   ctx.strokeStyle = color || '#5599cc'; ctx.lineWidth = 2.5;
   ctx.beginPath();
-  data.forEach((d, i) => {{ if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); }});
+  data.forEach((d, i) => { if (i===0) ctx.moveTo(x(i), y(d.v)); else ctx.lineTo(x(i), y(d.v)); });
   ctx.stroke();
 
   // Current value dot + label (white, bold)
@@ -331,19 +331,19 @@ function drawChart(canvasId, data, threshold, threshLabel, above, color, threshC
   // X labels (white)
   ctx.fillStyle = '#aaa'; ctx.font = '10px -apple-system'; ctx.textAlign = 'center';
   const step = Math.max(1, Math.floor(data.length / 4));
-  data.forEach((d, i) => {{ if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); }});
-}}
+  data.forEach((d, i) => { if (i === 0 || i === data.length - 1 || i % step === 0) ctx.fillText(d.d, x(i), H - 5); });
+}
 
-const BAKED = {json.dumps(clean(signal))};
+const BAKED = {"timestamp": "2026-04-02 09:22", "btc_spot": 66904, "dvol": 52.2, "dvol_sma20": 53.4, "dvol_falling": 1, "rv": 41.1, "vrp": 11.2, "vrp_ok": true, "high_20d": 75997, "hist_dvol": [{"d": "03/04", "v": 55.5}, {"d": "03/05", "v": 54.7}, {"d": "03/06", "v": 55.5}, {"d": "03/07", "v": 58.6}, {"d": "03/08", "v": 60.5}, {"d": "03/09", "v": 55.5}, {"d": "03/10", "v": 55.0}, {"d": "03/11", "v": 53.9}, {"d": "03/12", "v": 54.3}, {"d": "03/13", "v": 53.0}, {"d": "03/14", "v": 53.3}, {"d": "03/15", "v": 52.9}, {"d": "03/16", "v": 52.8}, {"d": "03/17", "v": 51.4}, {"d": "03/18", "v": 53.8}, {"d": "03/19", "v": 54.3}, {"d": "03/20", "v": 54.4}, {"d": "03/21", "v": 55.2}, {"d": "03/22", "v": 56.7}, {"d": "03/23", "v": 53.5}, {"d": "03/24", "v": 52.7}, {"d": "03/25", "v": 51.0}, {"d": "03/26", "v": 52.5}, {"d": "03/27", "v": 53.7}, {"d": "03/28", "v": 53.7}, {"d": "03/29", "v": 54.6}, {"d": "03/30", "v": 55.3}, {"d": "03/31", "v": 52.2}, {"d": "04/01", "v": 51.5}, {"d": "04/02", "v": 52.2}], "hist_rv": [{"d": "03/05", "v": 86.2}, {"d": "03/06", "v": 85.9}, {"d": "03/07", "v": 69.9}, {"d": "03/08", "v": 58.5}, {"d": "03/09", "v": 59.1}, {"d": "03/10", "v": 59.1}, {"d": "03/11", "v": 59.2}, {"d": "03/12", "v": 58.5}, {"d": "03/13", "v": 58.5}, {"d": "03/14", "v": 57.6}, {"d": "03/15", "v": 55.5}, {"d": "03/16", "v": 56.5}, {"d": "03/17", "v": 56.2}, {"d": "03/18", "v": 58.6}, {"d": "03/19", "v": 58.4}, {"d": "03/20", "v": 58.0}, {"d": "03/21", "v": 58.0}, {"d": "03/22", "v": 59.0}, {"d": "03/23", "v": 60.5}, {"d": "03/24", "v": 60.6}, {"d": "03/24", "v": 58.4}, {"d": "03/25", "v": 58.5}, {"d": "03/26", "v": 53.3}, {"d": "03/27", "v": 53.8}, {"d": "03/28", "v": 52.8}, {"d": "03/29", "v": 52.6}, {"d": "03/30", "v": 52.3}, {"d": "03/31", "v": 49.0}, {"d": "04/01", "v": 49.3}, {"d": "04/02", "v": 41.1}], "hist_btc": [{"d": "03/05", "v": 71142}, {"d": "03/06", "v": 68284}, {"d": "03/07", "v": 67449}, {"d": "03/08", "v": 67219}, {"d": "03/09", "v": 68982}, {"d": "03/10", "v": 70250}, {"d": "03/11", "v": 70650}, {"d": "03/12", "v": 70182}, {"d": "03/13", "v": 71357}, {"d": "03/14", "v": 70824}, {"d": "03/15", "v": 71741}, {"d": "03/16", "v": 74235}, {"d": "03/17", "v": 74540}, {"d": "03/18", "v": 71228}, {"d": "03/19", "v": 70492}, {"d": "03/20", "v": 70041}, {"d": "03/21", "v": 70448}, {"d": "03/22", "v": 68177}, {"d": "03/23", "v": 70899}, {"d": "03/24", "v": 69810}, {"d": "03/24", "v": 70921}, {"d": "03/25", "v": 70080}, {"d": "03/26", "v": 68522}, {"d": "03/27", "v": 66503}, {"d": "03/28", "v": 66658}, {"d": "03/29", "v": 67586}, {"d": "03/30", "v": 67332}, {"d": "03/31", "v": 68671}, {"d": "04/01", "v": 66910}, {"d": "04/02", "v": 66899}], "hist_pb": [{"d": "03/05", "v": 3.9}, {"d": "03/06", "v": 7.8}, {"d": "03/07", "v": 8.9}, {"d": "03/08", "v": 9.2}, {"d": "03/09", "v": 6.9}, {"d": "03/10", "v": 5.2}, {"d": "03/11", "v": 4.6}, {"d": "03/12", "v": 5.2}, {"d": "03/13", "v": 3.7}, {"d": "03/14", "v": 4.4}, {"d": "03/15", "v": 3.1}, {"d": "03/16", "v": 0.4}, {"d": "03/17", "v": 1.9}, {"d": "03/18", "v": 6.3}, {"d": "03/19", "v": 7.2}, {"d": "03/20", "v": 7.8}, {"d": "03/21", "v": 7.3}, {"d": "03/22", "v": 10.3}, {"d": "03/23", "v": 6.7}, {"d": "03/24", "v": 8.1}, {"d": "03/24", "v": 6.7}, {"d": "03/25", "v": 7.8}, {"d": "03/26", "v": 9.8}, {"d": "03/27", "v": 12.5}, {"d": "03/28", "v": 12.3}, {"d": "03/29", "v": 11.1}, {"d": "03/30", "v": 11.4}, {"d": "03/31", "v": 9.6}, {"d": "04/01", "v": 12.0}, {"d": "04/02", "v": 12.0}], "pullback_pct": 12.0, "pullback_ok": 1, "ma200": 89907, "pct_above_ma200": -25.6, "cb_active": 0, "next_expiry": "2026-04-17", "dte": 14, "strike": 70250, "est_premium": 920, "est_prem_pct": 1.37, "position": {"status": "idle"}, "strike_ladder": [{"otm_pct": 3, "strike": 68912, "premium": 1316, "yield_mo": 1.97, "delta": 0.38, "p_itm": 35, "breakeven": 70228}, {"otm_pct": 5, "strike": 70250, "premium": 920, "yield_mo": 1.37, "delta": 0.29, "p_itm": 27, "breakeven": 71170}, {"otm_pct": 7, "strike": 71588, "premium": 624, "yield_mo": 0.93, "delta": 0.22, "p_itm": 19, "breakeven": 72212}, {"otm_pct": 10, "strike": 73595, "premium": 329, "yield_mo": 0.49, "delta": 0.13, "p_itm": 11, "breakeven": 73924}], "action": "WAIT", "reason": "Filters not met: No valid expiry (DTE=14)", "book": [{"id": "IBIT-P37-20260417", "ticker": "IBIT", "type": "put", "strike": 37.0, "expiry": "2026-04-17", "qty": 265, "basis": 1.54, "account": "taxable", "underlying": 37.95, "bid": 1.14, "ask": 1.16, "mid": 1.15, "last": 1.14, "otm_pct": 2.5, "dte": 14, "pt_pct": 25.3, "action": "HOLD"}, {"id": "GBTC-C60-20260515", "ticker": "GBTC", "type": "call", "strike": 60.0, "expiry": "2026-05-15", "qty": 125, "basis": 2.6, "account": "taxable", "underlying": 52.07, "bid": 0.7, "ask": 1.15, "mid": 0.92, "last": 1.3, "otm_pct": 15.2, "dte": 42, "pt_pct": 64.4, "action": "HOLD"}, {"id": "BTC-C34-20260515", "ticker": "BTC", "type": "call", "strike": 34.0, "expiry": "2026-05-15", "qty": 56, "basis": 1.5, "account": "taxable", "underlying": 29.61, "bid": 0.15, "ask": 1.45, "mid": 0.8, "last": 0.65, "otm_pct": 14.8, "dte": 42, "pt_pct": 46.7, "action": "HOLD"}, {"id": "IBIT-C44-20260515", "ticker": "IBIT", "type": "call", "strike": 44.0, "expiry": "2026-05-15", "qty": 140, "basis": 1.75, "account": "roth", "underlying": 37.95, "bid": 0.63, "ask": 0.64, "mid": 0.64, "last": 0.63, "otm_pct": 15.9, "dte": 42, "pt_pct": 63.7, "action": "HOLD"}], "risk_alerts": [{"level": "BREACH", "rule": "max_contracts_per_strike", "msg": "IBIT-P37.0-2026-04-17: 265 contracts > 200 limit (across 1 accounts)"}, {"level": "WARNING", "rule": "concentration", "msg": "IBIT-P37.0-2026-04-17: 38% of total premium at risk (threshold: 30%)"}, {"level": "WARNING", "rule": "concentration", "msg": "GBTC-C60.0-2026-05-15: 31% of total premium at risk (threshold: 30%)"}], "risk_snapshot": {"open_positions": 4, "total_premium_at_risk": 105696, "limits": {"max_contracts_per_strike": 200, "max_notional_per_trade_usd": 75000, "max_premium_at_risk_pct": 15, "max_open_positions": 6, "concentration_alert_pct": 30}}, "sizing": {"current_pct": 32.9, "target_pct": 30, "gap_pct": -2.9, "dvol_pctile": 81.0, "recommended_contracts": 0, "ticker": "IBIT", "per_account": [{"label": "ROTH IRA", "type": "roth", "tax_rate": 0.0, "priority": 1, "btc_eq": 16.47, "covered_btc_eq": 7.94, "available_btc_eq": 8.53, "holdings": {"IBIT": {"shares": 29043.0, "btc_eq": 16.47}}}, {"label": "Rollover IRA", "type": "ira", "tax_rate": 0.37, "priority": 2, "btc_eq": 22.35, "covered_btc_eq": 0, "available_btc_eq": 22.35, "holdings": {"FBTC": {"shares": 25681.0, "btc_eq": 22.35}}}, {"label": "SEP-IRA", "type": "ira", "tax_rate": 0.37, "priority": 3, "btc_eq": 2.38, "covered_btc_eq": 0, "available_btc_eq": 2.38, "holdings": {"IBIT": {"shares": 4196.0, "btc_eq": 2.38}}}, {"label": "TRADING", "type": "taxable", "tax_rate": 0.541, "priority": 4, "btc_eq": 20.05, "covered_btc_eq": 12.21, "available_btc_eq": 7.85, "holdings": {"BTC": {"shares": 5600.0, "btc_eq": 2.48}, "GBTC": {"shares": 22580.0, "btc_eq": 17.57}}}], "total_btc_eq": 61.26, "reason": "DVOL 81th pctile -> 30%"}, "overrides": {"flags": [{"type": "check_override", "msg": "Yesterday was WAIT \u2014 did you write anyway?"}], "summary": {"total": 1, "alpha": 0, "captured": 0, "missed": 0}, "recent": [{"date": "2026-03-31", "athena_signal": "WAIT", "user_action": "ALIGN", "reason": "Testing forward journal system", "premium_captured": 0, "premium_missed": 0, "outcome_notes": ""}]}, "pnl": {"total_realized": 685236, "total_premium": 1203604, "closed_trades": 50, "win_rate": 92, "annualized_pnl": 836492, "years_active": 0.82, "by_type": {"calls": {"n": 36, "pnl": 434477, "win_rate": 97, "avg_pnl": 12069, "avg_days": 13}, "puts": {"n": 14, "pnl": 250759, "win_rate": 79, "avg_pnl": 17911, "avg_days": 29}}, "monthly": {"2025-06": {"n": 1, "pnl": 11223, "prem": 11223}, "2025-07": {"n": 4, "pnl": 51639, "prem": 51639}, "2025-08": {"n": 10, "pnl": 162914, "prem": 179457}, "2025-09": {"n": 4, "pnl": 69568, "prem": 71374}, "2025-10": {"n": 5, "pnl": -21066, "prem": 180470}, "2025-11": {"n": 4, "pnl": 176512, "prem": 176512}, "2025-12": {"n": 6, "pnl": 73207, "prem": 105152}, "2026-01": {"n": 9, "pnl": 152157, "prem": 259401}, "2026-03": {"n": 7, "pnl": 9082, "prem": 168377}}, "by_account": {"TRADING (taxable)": {"n": 29, "pnl": 341103}, "ROTH IRA": {"n": 11, "pnl": 217514}, "Rollover IRA": {"n": 4, "pnl": 102314}, "SEP-IRA": {"n": 6, "pnl": 24305}}}, "regime": {"funding_8h_pct": -0.0001, "funding_annualized": -0.1, "funding_signal": "neutral", "term_spread": 8.2, "term_front_iv": 42.1, "term_back_iv": 50.3, "term_signal": "contango", "skew": 2.6, "skew_atm_iv": 50.3, "skew_otm5_iv": 47.7, "skew_signal": "narrow", "dvol_percentile": 79, "composite_score": 75, "composite_label": "FAVORABLE"}};
 
 // Initial chart draw from baked data
 drawChart('c1', BAKED.hist_dvol, BAKED.dvol_sma20, 'SMA20 = '+BAKED.dvol_sma20, false, '#5599cc', '#66bb6a');
 const _vrp = [];
-BAKED.hist_dvol.forEach(function(dv) {{
-  const rv = BAKED.hist_rv.find(function(r) {{ return r.d === dv.d; }});
-  if (rv) _vrp.push({{d: dv.d, v: Math.round((dv.v - rv.v) * 10) / 10}});
-}});
-drawChart('c2', _vrp.length ? _vrp : [{{d:'—',v:0}}], 5, 'VRP = 5 (min)', true, '#ff9800', '#66bb6a');
+BAKED.hist_dvol.forEach(function(dv) {
+  const rv = BAKED.hist_rv.find(function(r) { return r.d === dv.d; });
+  if (rv) _vrp.push({d: dv.d, v: Math.round((dv.v - rv.v) * 10) / 10});
+});
+drawChart('c2', _vrp.length ? _vrp : [{d:'—',v:0}], 5, 'VRP = 5 (min)', true, '#ff9800', '#66bb6a');
 drawChart('c3', BAKED.hist_pb, 5, 'Pullback = 5% (min)', true, '#e57373', '#66bb6a');
 </script>
 
